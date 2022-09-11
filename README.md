@@ -17,7 +17,7 @@ Overview
 * Author: Gavin Lyons.
 
 * Description:
-A Raspberry pi PICO RP2040 library to display data on a 8-digit TM1638 seven segment module.
+A Raspberry pi PICO SDK RP2040 library to display data on a 8-digit TM1638 seven segment module.
 Based on my arduino library called "TM1638plus".
 This library supports 3 different models, pictured above from left to right.
 
@@ -27,17 +27,14 @@ This library supports 3 different models, pictured above from left to right.
 
 * Developed on
 	1. Raspberry pi PICO RP2040
-	2. C++ complier G++ for arm-none-eabi
-	3. CMAKE VS code
+	2. SDK C++ complier G++ for arm-none-eabi
+	3. CMAKE VScode
 
 * My Original Arduino Library the references in Readme notes section refer here.
 	[ Link ](https://github.com/gavinlyonsrepo/TM1638plus)
 
 Test
 --------------------------------
-
-Wire up your Display.
-Next step is to test LED display and the just installed library with an example file.
 
 There are three examples files in example folder, copy the one you want to src folder and rename it main.cpp. Then build with cmake. 
 
@@ -51,15 +48,14 @@ There are three examples files in example folder, copy the one you want to src f
 Features
 ----------------------
 
-Connections to RPI:
+Connections to RPI-PICO, pick any GPIO you want and change it the main.cpp:
 
 1. GPIO = STB = Strobe
 2. GPIO  = CLK  = Clock
 3. GPIO = DIO = Data input / output
 4. GND
-5. VCC 3.3V (or 5V see Note)
+5. VCC 3.3V ( If VCC is set to 5V, level shift GPIO to 3.3V or damage could result.)
 
-NOTE : If VCC is set to 5V, level shift GPIO to 3.3V or damage could result.
 
 This library supports three variants of the TM1638,
 which for purposes of this documentation,
