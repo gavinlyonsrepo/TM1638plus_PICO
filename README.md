@@ -17,7 +17,7 @@ Overview
 * Author: Gavin Lyons.
 
 * Description:
-A Raspberry pi PICO SDK RP2040 library to display data on a 8-digit TM1638 seven segment module.
+A Raspberry pi PICO, C++ SDK, RP2040 library to display data on a 8-digit TM1638 seven segment module.
 Based on my arduino library called "TM1638plus".
 This library supports 3 different models, pictured above from left to right.
 
@@ -30,7 +30,7 @@ This library supports 3 different models, pictured above from left to right.
 	2. SDK C++ complier G++ for arm-none-eabi
 	3. CMAKE VScode
 
-* My Original Arduino Library the references in Readme notes section refer here.
+* Port: Ported from my  Arduino Library, the references in Readme notes section refer here.
 	[ Link ](https://github.com/gavinlyonsrepo/TM1638plus)
 
 Test
