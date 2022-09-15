@@ -22,7 +22,7 @@
   TEST 14 Buttons + LEDS
 
   Author: Gavin Lyons.
-  URL: https://github.com/gavinlyonsrepo/TM1638plus
+  URL: https://github.com/gavinlyonsrepo/TM1638plus_PICO
 */
 
 
