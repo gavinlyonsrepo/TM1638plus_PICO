@@ -38,13 +38,15 @@ This library supports 3 different models, pictured above from left to right.
 Test
 --------------------------------
 
-There are three examples files in example folder, copy the one you want to src folder and rename it main.cpp. Then build with cmake. 
+There are three examples files(main.cpp) in example folder, To select the one that builds 
+comment it's path in, in the CMakeLists.txt file section add_executable section.
+Comment one path in and one only.
 
 |  List No | example file name  | Model Num | Desc|
 | ------ | ------ |  ------ | ------ |
-| 1 | Model1_TESTS | 1 | test routines  |
-| 2 | Model2_TESTS | 2 | test routines  |
-| 3 | Model3_TESTS | 3 | test routines  |
+| 1 | Model1_TESTS/main.cpp | 1 | test routines for model 1 |
+| 2 | Model2_TESTS/main.cpp | 2 | test routines for model 2 |
+| 3 | Model3_TESTS/main.cpp | 3 | test routines for model 3 |
 
 
 Features

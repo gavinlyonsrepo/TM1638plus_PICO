@@ -14,7 +14,9 @@ pico_sdk_init()
 
 # Tell CMake where to find the executable source file
 add_executable(${PROJECT_NAME} 
-  src/main.cpp
+  examples/MODEL1/main.cpp
+  #examples/MODEL2/main.cpp
+  #examples/MODEL3/main.cpp
 )
 
 # Create map/bin/hex/uf2 files

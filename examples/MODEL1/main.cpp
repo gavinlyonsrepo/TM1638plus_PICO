@@ -1,8 +1,8 @@
 /*
   Project Name: TM1638
-  Description: demo file library for  TM1638 module(8 bicolour green and red LEDs & 8 pushbuttons). 
-  Called Model 3 in this library.  This model is labelled LKM1638 or tm1638 v1.3
-  Carries out series of tests demonstrating  library TM1638plus_PICO
+  File: TM1638plus_TEST_Model1.ino
+  Description: demo file library for  TM1638 module(LED & KEY). Model 1
+  Carries out series of tests demonstrating library TM1638plus.
 
   TESTS:
   TEST 0 Reset
@@ -29,7 +29,7 @@
 #include "pico/stdlib.h"
 #include "tm1638/tm1638plus.h" //include the library
 
-// GPIO I/O pins on the PICO connected to strobe, clock, data,
+// GPIO I/O pins on the  PICO connected to strobe, clock, data,
 //pick on any I/O you want.
 #define  STROBE_TM 2 // strobe = GPIO connected to strobe line of module
 #define  CLOCK_TM 3  // clock = GPIO connected to clock line of module
@@ -40,9 +40,9 @@ TM1638plus tm(STROBE_TM, CLOCK_TM , DIO_TM);
 
 // Some vars and defines for the tests.
 #define myTestDelay  5000
+#define myTestDelay3 3000
 #define myTestDelay1 1000
 uint8_t  testcount = 0;
-
 
 void Test0(void);
 void Test1(void);
@@ -63,7 +63,6 @@ void doLEDs(uint8_t value);
 
 int main()
 {
-
   tm.displayBegin();
   busy_wait_ms(myTestDelay1);
   //Test 0 reset
@@ -124,33 +123,42 @@ void Test2() {
 }
 
 void Test3() {
-  //TEST 3 single segment (pos, (dp)gfedcba)
-  //In this case  segment g (middle dash) of digit position 7
-  tm.display7Seg(7, 0b01000000); // Displays "       -"
-  busy_wait_ms(myTestDelay);
+  //TEST 3 single segment (digit position, (dp)gfedcba)
+  // (dp)gfedcba =  seven segments positions
+  uint8_t pos = 0;
+  for (pos = 0 ; pos<8 ; pos++)
+  {
+    tm.display7Seg(pos, 1<<7-pos); // Displays a single seg in (dp)gfedcba) in each  pos 0-7
+    busy_wait_ms(myTestDelay1);
+  }
 }
 
 void Test4() {
   // Test 4 Hex digits.
-  tm.displayHex(0, 1);
-  tm.displayHex(1, 2);
-  tm.displayHex(2, 3);
-  tm.displayHex(3, 4);
-  tm.displayHex(4, 5);
-  tm.displayHex(5, 6);
-  tm.displayHex(6, 7);
-  tm.displayHex(7, 8);  
+  tm.displayHex(0, 0);
+  tm.displayHex(1, 1);
+  tm.displayHex(2, 2);
+  tm.displayHex(3, 3);
+  tm.displayHex(4, 4);
+  tm.displayHex(5, 5);
+  tm.displayHex(6, 6);
+  tm.displayHex(7, 7);  
   busy_wait_ms(myTestDelay); // display 12345678
 
   tm.displayHex(0, 8);
   tm.displayHex(1, 9);
-  tm.displayHex(2, 10);
-  tm.displayHex(3, 11);
-  tm.displayHex(4, 12);
-  tm.displayHex(5, 13);
-  tm.displayHex(6, 14);
-  tm.displayHex(7, 15);
+  tm.displayHex(2, 0x0A);
+  tm.displayHex(3, 0x0B);
+  tm.displayHex(4, 0x0C);
+  tm.displayHex(5, 0x0D);
+  tm.displayHex(6, 0x0E);
+  tm.displayHex(7, 0x0F);
   busy_wait_ms(myTestDelay); // display 89ABCDEF
+  tm.reset();
+
+  tm.displayHex(1, 0xFE);
+  tm.displayHex(7, 0x10);
+  busy_wait_ms(myTestDelay);  // display " E      0"
 }
 
 void Test5() {
@@ -174,17 +182,31 @@ void Test6() {
 }
 
 void Test7() {
-  // TEST 7a Integer
-  tm.displayIntNum(45, false); // "45      "
+  // TEST 7a Integer left aligned , NO leading zeros 
+  tm.displayIntNum(45, false, TMAlignTextLeft); // "45      "
   busy_wait_ms(myTestDelay);
-  // TEST 7b Integer
-  tm.displayIntNum(99991, true); // "00099991"
+  // TEST 7b Integer left aligned , leading zeros 
+  tm.displayIntNum(99991, true, TMAlignTextLeft); // "00099991"
   busy_wait_ms(myTestDelay);
   tm.reset();
-  // TEST 7b tm.DisplayDecNumNIbble
-  tm.DisplayDecNumNibble(1234, 5678, false); // "12345678"
+  // TEST 7c Integer right aligned , NO leading zeros 
+  tm.displayIntNum(35, false, TMAlignTextRight); // "      35"
   busy_wait_ms(myTestDelay);
-  tm.DisplayDecNumNibble(123, 662, true); // "01230662"
+  // TEST 7d Integer right aligned , leading zeros 
+  tm.displayIntNum(9983551, true, TMAlignTextRight); // "09983551"
+  busy_wait_ms(myTestDelay);
+
+  // TEST 7e tm.DisplayDecNumNIbble left aligned
+  tm.DisplayDecNumNibble(134, 70, false, TMAlignTextLeft); // "134 " "70" , left aligned, NO leading zeros
+  busy_wait_ms(myTestDelay);
+  tm.DisplayDecNumNibble(23, 662, true, TMAlignTextLeft); // "0023" "0662" , left aligned , leading zeros
+  busy_wait_ms(myTestDelay);
+  tm.reset();
+
+  // TEST 7f tm.DisplayDecNumNIbble right aligned
+  tm.DisplayDecNumNibble(43, 991, false, TMAlignTextRight); // "  43" " 991" , right aligned, NO leading zeros
+  busy_wait_ms(myTestDelay);
+  tm.DisplayDecNumNibble(53, 8, true, TMAlignTextRight); // "0053" "0008" , right aligned , leading zeros
   busy_wait_ms(myTestDelay);
 }
 
@@ -265,47 +287,30 @@ void Test13()
   //Test 13 LED display
   uint8_t LEDposition = 0;
 
-  // Test 13A Turn on green leds with setLED
+  // Test 13A Turn on redleds one by one, left to right, with setLED where 0 is L1 and 7 is L8 (L8 RHS of display)
   for (LEDposition = 0; LEDposition < 8; LEDposition++) {
-    tm.setLED(LEDposition, TM_GREEN_LED);
+    tm.setLED(LEDposition, 1);
     busy_wait_ms(500);
-    tm.setLED(LEDposition, TM_OFF_LED);
+    tm.setLED(LEDposition, 0);
   }
 
-  // Test 13b turn on red LEDs with setLED
-  for (LEDposition = 0; LEDposition < 8; LEDposition++) {
-    tm.setLED(LEDposition, TM_RED_LED);
-    busy_wait_ms(500);
-    tm.setLED(LEDposition, TM_OFF_LED);
-  }
-
-  // TEST 13c 
-  // test setLEDs function (0xgreenred) (0xGGRR) (LED8-LED1, LED8-LED1)
-  // Upper byte switch LED green colour ON, lower byte = switch LED red colour ON
-  // NB Note on the unit, LED8 is onthe right hand side so result is mirrored.
-  // Example:
-  // E0 = green on 07 = red on 
-  // E0  = 1110 0000 , 07 = 0000 0111 = 11100111 = GGGXXRRR = LED8-LED1
-  // Shows on display as  LED1-LED8 turns on RRRXXGGG as LED 8 is on right hand side.
-   
-  tm.setLEDs(0xE007); //L1-L8 turns on RRRXXGGG on display
-  busy_wait_ms(3000);
-  
-  tm.setLEDs(0xF00F); // L1-L8 turns on RRRRGGGG on display
-  busy_wait_ms(3000);
-  tm.setLEDs(0xFE01); // L1-L8 turns on RGGGGGGG on display
-  busy_wait_ms(3000);
-  tm.setLEDs(0x00FF); //all red   RRRRRRR
-  busy_wait_ms(3000);
-  tm.setLEDs(0xFF00); //all green GGGGGGG
-  busy_wait_ms(3000);
-  tm.setLEDs(0x0000); //all off
-  busy_wait_ms(3000);
+  // TEST 13b test setLEDs function (0xLEDXX) ( L8-L1 , XX )
+  // NOTE passed L8-L1 and on display L8 is on right hand side. i.e. 0x01 turns on L1. LXXX XXXX
+  // For model 1 just use upper byte , lower byte is is used by model3 for bi-color leds leave at 0x00 for model 1.
+  tm.setLEDs(0xFF00); //  all LEDs on 
+  busy_wait_ms(myTestDelay3);
+  tm.setLEDs(0x0100); // Displays as LXXX XXXX (L1-L8) , NOTE on display L8 is on right hand side.
+  busy_wait_ms(myTestDelay3);
+  tm.setLEDs(0xF000); //  Displays as XXXX LLLL (L1-L8) , NOTE on display L8 is on right hand side.
+  busy_wait_ms(myTestDelay3);
+  tm.setLEDs(0x0000); // all off
+  busy_wait_ms(myTestDelay3);
 
 }
 
 void Test14() {
   //Test 14 buttons and LED test, press switch number S-X to turn on LED-X, where x is 1-8.
+  //The HEx value of switch is also sent to Serial port.
   tm.displayText("buttons ");
   busy_wait_ms(2000);
   while (1) // Loop here forever
@@ -335,4 +340,3 @@ void doLEDs(uint8_t value) {
     value = value >> 1;
   }
 }
-

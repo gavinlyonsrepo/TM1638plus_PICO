@@ -53,13 +53,20 @@ public:
 	// i.e 0b01000001 will set g and a on. 
 	void display7Seg(uint8_t position, uint8_t value);
 	
-	//Display an integer and leading zeros optional
-	void displayIntNum(unsigned long number, bool leadingZeros = true);
+    // Display an integer and leading zeros optional
+	// Param 1 :: integer to display 2^32 
+	// Param 2 :: bool leading zeros , true on , false off
+	// Param 3 :: enum text alignment , left or right alignment
+	void displayIntNum(unsigned long number, bool leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
 	
-	//Divides the display into two nibbles and displays a Decimal number in each.
-	//takes in two numbers 0-9999 for each nibble ,  and byte for decimal point display,
-	//and leading zeros optional
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, bool leadingZeros = true);
+	// Divides the display into two nibbles and displays a Decimal number in each.
+	// takes in two numbers 0-9999 for each nibble ,
+	// and leading zeros optional
+	// Param 1 :: upper nibble integer 2^16 
+	// Param 2 :: lower nibble integer 2^16 
+	// Param 3 :: bool leading zeros , true on , false off
+	// Param 4 :: enum text alignment , left or right alignment
+	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, bool leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
 	
 	  // Set the LEDs. passed one  16bit integer.
 	  // MODEL 3:

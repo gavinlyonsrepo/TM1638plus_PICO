@@ -33,6 +33,11 @@
 #define TM_HFIN_DELAY   1 // uS Delay used by shiftIn function for High-freq MCU  
 #define TM_HFOUT_DELAY  1 // uS Delay used by shiftOut function for High-freq MCU   
 
+typedef enum 
+{
+	TMAlignTextRight = 1, 
+	TMAlignTextLeft = 2, 
+}AlignTextType_e; // Alignment of text
 
 // font , map of ASCII values/table to 7-segment, offset to position 32. 
 const  unsigned char SevenSeg[] = {
@@ -127,11 +132,10 @@ const  unsigned char SevenSeg[] = {
   0x76, /* x */
   0x6E, /* y */
   0x5B, /* z */
- // Note : Removed last 4 characters to reduce program size as of v 1.3.0 
-//  0x46, /* { */
-//  0x30, /* | */
-//  0x70, /* } */
-//  0x01, /* ~ */ 
+  0x46, /* { */
+  0x30, /* | */
+  0x70, /* } */
+  0x01, /* ~ */ 
 };
 
 // Class for some common functions 
