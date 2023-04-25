@@ -1,5 +1,5 @@
 /*!
-	@file     Ttm638plus_Model2.h
+	@file     Tm638plus_Model2.h
 	@author   Gavin Lyons
 	@brief PICO library Tm1638plus, Header file for TM1638 module(16 KEY 16 pushbuttons. Model 2.
 */

@@ -58,7 +58,7 @@ protected:
 	uint8_t _DATA_IO;    /**<  GPIO connected to DIO on Tm1638  */
 	uint8_t _CLOCK_IO; /**<  GPIO connected to CLk on Tm1638  */
 
-  uint8_t  HighFreqshiftin(uint8_t dataPin, uint8_t clockPin) ;
+	uint8_t  HighFreqshiftin(uint8_t dataPin, uint8_t clockPin) ;
 	void HighFreqshiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t val);
 	void sendCommand(uint8_t value);
 	void sendData(uint8_t  data);
