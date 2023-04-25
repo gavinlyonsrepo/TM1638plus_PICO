@@ -1,30 +1,29 @@
-/*
-  Project Name: TM1638
-  File: TM1638plus_TEST_Model1.ino
-  Description: demo file library for  TM1638 module(LED & KEY). Model 1
-  Carries out series of tests demonstrating library TM1638plus.
+/*!
+	@file     main.cpp
+	@author   Gavin Lyons
+	@brief
+		 Demo file library for  TM1638 module(LED & KEY). MODEL 1
+	@note
+		  Carries out series of tests to demo Rp2040 PICO library TM1638plus_PICO.
 
-  TESTS:
-  TEST 0 Reset
-  TEST 1 Brightness
-  TEST 2 ASCII display
-  TEST 3 Set a single segment
-  TEST 4 Hex digits
-  TEST 5 Text String with Decimal point
-  TEST 6 TEXT + ASCII combo
-  TEST 7 Integer Decimal number
-  TEST 8 Text String + Float
-  TEST 9 Text String + decimal number
-  TEST 10 Multiple dots
-  TEST 11 Display Overflow
-  TEST 12 Scrolling text
-  TEST 13 setLED and setLEDs method
-  TEST 14 Buttons + LEDS
+		TESTS:
 
-  Author: Gavin Lyons.
-  URL: https://github.com/gavinlyonsrepo/TM1638plus_PICO
+	0.   TEST 0 Reset
+	1.   TEST 1 Brightness
+	2.   TEST 2 ASCII display
+	3.   TEST 3 Set a single segment
+	4.   TEST 4 Hex digits
+	5.   TEST 5 Text String with Decimal point
+	6.   TEST 6 TEXT + ASCII combo
+	7.   TEST 7 Integer Decimal number
+	8.   TEST 8 Text String + Float
+	9.   TEST 9 Text String + decimal number
+	10. TEST 10 Multiple dots
+	11. TEST 11 Display Overflow
+	12. TEST 12 Scrolling text
+	13. TEST 13 setLED and setLEDs method
+	14. TEST 14 Buttons + LEDS
 */
-
 
 #include "pico/stdlib.h"
 #include "tm1638/tm1638plus.h" //include the library

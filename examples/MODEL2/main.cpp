@@ -1,25 +1,25 @@
-/*
-  Project Name: TM1638
-  File: TM1638plus_TEST_Model2.ino
-  Description: demo file library for "model 2" TM1638 module(16 KEY 16 pushbuutons).
-  Carries out series of tests demonstrating PICO library TM1638plus_PICO.
-  The tests will increment automatically with exception of test9, to enter press S16 during test8
-  
-  TESTS
+/*!
+	@file     main.cpp
+	@author   Gavin Lyons
+	@brief 
+		 demo file library for MODEL 2 TM1638 module(16 KEY 16 pushbuutons).
+	@note 
+		Carries out series of tests demonstrating rp2040 PICO  library TM1638plus_PICO.
+		The tests will increment automatically with exception of test9, to enter press S16 during test8
+ 
+		TESTS
 
-  TEST0 = reset function test  
-  TEST1 =  decimal numbers
-  TEST2 =  Hexadecimal number
-  TEST3 = manually set segments 
-  TEST4 = Display  strings
-  TEST5  =  ASCII to segments ( no reference to font table)
-  TEST6 = Brightness control 
-  TEST7 = Scroll text example
-  TEST8 = Push buttons ReadKey16() buttons function , press 16 to goto test9
-  TEST9 = Push buttons ReadKeys16Two() alternate  buttons function
-  
-  Author: Gavin Lyons.
-  URL: https://github.com/gavinlyonsrepo/TM1638plus_PICO
+		1. TEST0 = reset function test  
+		2. TEST1 =  decimal numbers
+		3. TEST2 =  Hexadecimal number
+		4. TEST3 = manually set segments 
+		5. TEST4 = Display  strings
+		6. TEST5  =  ASCII to segments ( no reference to font table)
+		7. TEST6 = Brightness control 
+		8. TEST7 = Scroll text example
+		9. TEST8 = Push buttons ReadKey16() buttons function , press 16 to goto test9
+		10. TEST9 = Push buttons ReadKeys16Two() alternate  buttons function
+
 */
 
 #include "pico/stdlib.h"
