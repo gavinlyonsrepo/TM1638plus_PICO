@@ -1,5 +1,5 @@
 
-![ module pics ](https://github.com/gavinlyonsrepo/TM1638plus/blob/master/extra/images/tm16383.jpg)
+
 
 Table of contents
 ---------------------------
@@ -7,6 +7,7 @@ Table of contents
   * [Overview](#overview)
   * [Examples](#examples)
   * [Hardware](#hardware)
+  * [Notes](#notes)
   * [See Also](#see-also)
 
 Overview
@@ -50,7 +51,9 @@ Connections to RPI-PICO, pick any GPIO you want and change it the main.cpp:
 This library supports three variants of the TM1638,
 which for purposes of this documentation,
 will be named Model 1 ,Model 2 and Model 3. 
-Pictured at top of readme from left to right.
+Pictured below from left to right.
+
+![ module pics ](https://github.com/gavinlyonsrepo/TM1638plus/blob/master/extra/images/tm16383.jpg)
 
 | Model No | Module Name | LEDS | Push buttons |
 | ------ | ------ |  ------ | ------ |
@@ -64,9 +67,9 @@ See Also
 This library is a port of my Arduino Library. There you will find the full documentation
 including the API, which is near identical to PICO except ::
  
-	* Extra examples files for Arduino and examples are .ino files.
-	* High freq data member flag is not needed in PICO library.
-	* PICO constructor has GPIO parameters in base class.
-	* In file dependancy graphs ,High level file includes will differ. #include "pico/stdlib.h" will be missing etc.
+1. Extra examples files for Arduino and examples are .ino files.
+2. High freq data member flag is not needed in PICO library.
+3. PICO constructor has GPIO parameters in base class.
+4. In file dependancy graphs ,High level file includes will differ. #include "pico/stdlib.h" will be missing etc.
 
 [ Arduino github Link ](https://github.com/gavinlyonsrepo/TM1638plus)
