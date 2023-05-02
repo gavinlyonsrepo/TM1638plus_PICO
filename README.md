@@ -1,5 +1,4 @@
-
-
+# TM1638plus_PICO
 
 Table of contents
 ---------------------------
@@ -7,7 +6,6 @@ Table of contents
   * [Overview](#overview)
   * [Examples](#examples)
   * [Hardware](#hardware)
-  * [Notes](#notes)
   * [See Also](#see-also)
 
 Overview
