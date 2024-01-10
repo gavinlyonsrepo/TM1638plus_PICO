@@ -1,15 +1,17 @@
+[![Website](https://img.shields.io/badge/Website-Link-blue.svg)](https://gavinlyonsrepo.github.io/)  [![Rss](https://img.shields.io/badge/Subscribe-RSS-yellow.svg)](https://gavinlyonsrepo.github.io//feed.xml)  [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/whitelight976)
+
 # TM1638plus_PICO
 
-Table of contents
----------------------------
+## Table of contents
+
 
   * [Overview](#overview)
   * [Examples](#examples)
   * [Hardware](#hardware)
   * [See Also](#see-also)
 
-Overview
---------------------------------------------
+## Overview
+
 * Name: TM1638plus_PICO
 * Author: Gavin Lyons.
 
@@ -22,8 +24,7 @@ A Raspberry pi PICO, C++ SDK, RP2040 library to display data on a 8-digit TM1638
 	2. SDK C++ complier G++ for arm-none-eabi
 	3. CMAKE VScode
 
-Examples
---------------------------------
+## Examples
 
 There are three examples files(main.cpp) in example folder, To select the one that builds 
 comment it's path in, in the CMakeLists.txt file section add_executable section.
@@ -35,8 +36,7 @@ Comment one path in and one only.
 | 2 | Model2_TESTS/main.cpp | 2 | test routines for model 2 |
 | 3 | Model3_TESTS/main.cpp | 3 | test routines for model 3 |
 
-Hardware
-----------------------
+## Hardware
 
 Connections to RPI-PICO, pick any GPIO you want and change it the main.cpp:
 
@@ -59,8 +59,7 @@ Pictured below from left to right.
 | 2 | TM1638 KEYS, QYF  | 0 | 16 |
 | 3 | TM1638 V1.3 or LKM1638  | 8 bi color,  red and green  | 8 |
 
-See Also
--------------------------------------
+## See Also
 
 This library is a port of my Arduino Library. There you will find the full documentation
 including the API, which is near identical to PICO except ::

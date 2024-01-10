@@ -130,7 +130,7 @@ void Test3() {
   uint8_t pos = 0;
   for (pos = 0 ; pos<8 ; pos++)
   {
-    tm.display7Seg(pos, 1<<7-pos); // Displays a single seg in (dp)gfedcba) in each  pos 0-7
+    tm.display7Seg(pos, 1<<(7-pos)); // Displays a single seg in (dp)gfedcba) in each  pos 0-7
     busy_wait_ms(myTestDelay1);
   }
 }
