@@ -33,8 +33,8 @@ public:
 	void displayASCIIwDot(uint8_t position, uint8_t ascii) ;
 	void displayHex(uint8_t position, uint8_t hex);
 	void display7Seg(uint8_t position, uint8_t value);
-	void displayIntNum(unsigned long number, bool leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, bool leadingZeros = true, AlignTextType_e = TMAlignTextLeft);
+	void displayIntNum(unsigned long number, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
+	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
 	
 };
 

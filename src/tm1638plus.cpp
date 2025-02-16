@@ -25,12 +25,12 @@ TM1638plus::TM1638plus(uint8_t strobe, uint8_t clock, uint8_t data) : TM1638plus
 */
 void TM1638plus::setLED(uint8_t position, uint8_t value)
 {
-  gpio_set_dir(_DATA_IO, GPIO_OUT);
-  sendCommand(TM_WRITE_LOC);
-  gpio_put(_STROBE_IO, false);
-  sendData(TM_LEDS_ADR + (position << 1));
-  sendData(value);
-  gpio_put(_STROBE_IO, true);
+	gpio_set_dir(_DATA_IO, GPIO_OUT);
+	sendCommand(TM_WRITE_LOC);
+	gpio_put(_STROBE_IO, false);
+	sendData(TM_LEDS_ADR + (position << 1));
+	sendData(value);
+	gpio_put(_STROBE_IO, true);
 }
 
 /*!
@@ -46,19 +46,19 @@ void TM1638plus::setLED(uint8_t position, uint8_t value)
 */
 void TM1638plus::setLEDs(uint16_t ledvalues)
 {
-  for (uint8_t LEDposition = 0;  LEDposition < 8; LEDposition++) {
-    uint8_t colour = 0;
+	for (uint8_t LEDposition = 0;  LEDposition < 8; LEDposition++) {
+		uint8_t colour = 0;
 
-    if ((ledvalues & (1 << LEDposition)) != 0) {
-      colour |= TM_RED_LED; //scan lower byte, set Red if one
-    } 
+		if ((ledvalues & (1 << LEDposition)) != 0) {
+			colour |= TM_RED_LED; //scan lower byte, set Red if one
+		} 
 
-    if ((ledvalues & (1 << (LEDposition + 8))) != 0) {
-      colour |= TM_GREEN_LED; //scan upper byte, set green if one
-    }
+		if ((ledvalues & (1 << (LEDposition + 8))) != 0) {
+			colour |= TM_GREEN_LED; //scan upper byte, set green if one
+		}
 
-    setLED(LEDposition, colour);
-  }
+		setLED(LEDposition, colour);
+	}
 }
 
 /*!
@@ -69,21 +69,21 @@ void TM1638plus::setLEDs(uint16_t ledvalues)
 */
 void TM1638plus::displayIntNum(unsigned long number, bool leadingZeros, AlignTextType_e TextAlignment)
 {
-  char values[TM_DISPLAY_SIZE + 1];
-  char TextDisplay[5] = "%";
-  char TextLeft[3] = "ld";
-  char TextRight[4] = "8ld";
-  
-  if (TextAlignment == TMAlignTextLeft)
-    {
-        strcat(TextDisplay ,TextLeft);  // %ld
-    }else if ( TextAlignment == TMAlignTextRight)
-    {
-        strcat(TextDisplay ,TextRight); // %8ld
-    }
-    
-  snprintf(values, TM_DISPLAY_SIZE + 1, leadingZeros ? "%08ld" : TextDisplay, number); 
-  displayText(values);
+	char values[TM_DISPLAY_SIZE + 1];
+	char TextDisplay[5] = "%";
+	char TextLeft[3] = "ld";
+	char TextRight[4] = "8ld";
+	
+	if (TextAlignment == AlignTextLeft)
+		{
+				strcat(TextDisplay ,TextLeft);  // %ld
+		}else if ( TextAlignment == AlignTextRight)
+		{
+				strcat(TextDisplay ,TextRight); // %8ld
+		}
+		
+	snprintf(values, TM_DISPLAY_SIZE + 1, leadingZeros ? "%08ld" : TextDisplay, number); 
+	displayText(values);
 }
 
 /*!
@@ -98,25 +98,25 @@ void TM1638plus::displayIntNum(unsigned long number, bool leadingZeros, AlignTex
 */
 void TM1638plus::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, bool leadingZeros, AlignTextType_e TextAlignment)
 {
-    char valuesUpper[TM_DISPLAY_SIZE + 1];
-    char valuesLower[TM_DISPLAY_SIZE/2 + 1];
-    char TextDisplay[5] = "%";
-    char TextLeft[4] = "-4d";
-    char TextRight[3] = "4d";
-   
-     if (TextAlignment == TMAlignTextLeft)
-    {
-        strcat(TextDisplay ,TextLeft);  // %-4d
-    }else if ( TextAlignment == TMAlignTextRight)
-    {
-        strcat(TextDisplay ,TextRight); // %4d
-    }
-    
-    snprintf(valuesUpper, TM_DISPLAY_SIZE/2 + 1, leadingZeros ? "%04d" : TextDisplay, numberUpper);
-    snprintf(valuesLower, TM_DISPLAY_SIZE/2 + 1, leadingZeros ? "%04d" : TextDisplay, numberLower); 
+		char valuesUpper[TM_DISPLAY_SIZE + 1];
+		char valuesLower[TM_DISPLAY_SIZE/2 + 1];
+		char TextDisplay[5] = "%";
+		char TextLeft[4] = "-4d";
+		char TextRight[3] = "4d";
+	 
+		 if (TextAlignment == AlignTextLeft)
+		{
+				strcat(TextDisplay ,TextLeft);  // %-4d
+		}else if ( TextAlignment == AlignTextRight)
+		{
+				strcat(TextDisplay ,TextRight); // %4d
+		}
+		
+		snprintf(valuesUpper, TM_DISPLAY_SIZE/2 + 1, leadingZeros ? "%04d" : TextDisplay, numberUpper);
+		snprintf(valuesLower, TM_DISPLAY_SIZE/2 + 1, leadingZeros ? "%04d" : TextDisplay, numberLower); 
 
-   strcat(valuesUpper ,valuesLower);
-   displayText(valuesUpper);
+	 strcat(valuesUpper ,valuesLower);
+	 displayText(valuesUpper);
 }
 
 /*!
@@ -127,17 +127,17 @@ void TM1638plus::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower
 		"abc.def" will be shown as "abcdef" with c decimal point turned on.
 */
 void TM1638plus::displayText(const char *text) {
-  char c, pos;
-  pos = 0;
-	  while ((c = (*text++)) && pos < TM_DISPLAY_SIZE)  {
+	char c, pos;
+	pos = 0;
+		while ((c = (*text++)) && pos < TM_DISPLAY_SIZE)  {
 		if (*text == '.' && c != '.') {
-		  displayASCIIwDot(pos++, c);
+			displayASCIIwDot(pos++, c);
 
-		  text++;
+			text++;
 		}  else {
-		  displayASCII(pos++, c);
+			displayASCII(pos++, c);
 		}
-	  }
+		}
 }
 
 /*!
@@ -146,8 +146,8 @@ void TM1638plus::displayText(const char *text) {
 	@param ascii The ASCII value from font table  to display 
 */
 void TM1638plus::displayASCIIwDot(uint8_t position, uint8_t ascii) { 
-    // add 128 or 0x080 0b1000000 to turn on decimal point/dot in seven seg
-  display7Seg(position, pFontSevenSegptr[ascii- TM_ASCII_OFFSET] + TM_DOT_MASK_DEC);
+		// add 128 or 0x080 0b1000000 to turn on decimal point/dot in seven seg
+	display7Seg(position, pFontSevenSegptr[ascii- TM_ASCII_OFFSET] + TM_DOT_MASK_DEC);
 }
 
 /*!
@@ -157,11 +157,11 @@ void TM1638plus::displayASCIIwDot(uint8_t position, uint8_t ascii) {
 	@note 	0b01000001 in value will set g and a on.
 */
 void TM1638plus::display7Seg(uint8_t position, uint8_t value) { // call 7-segment
-  sendCommand(TM_WRITE_LOC);
-  gpio_put(_STROBE_IO, false);
-  sendData(TM_SEG_ADR + (position << 1));
-  sendData(value);
-  gpio_put(_STROBE_IO, true); 
+	sendCommand(TM_WRITE_LOC);
+	gpio_put(_STROBE_IO, false);
+	sendData(TM_SEG_ADR + (position << 1));
+	sendData(value);
+	gpio_put(_STROBE_IO, true); 
 }
 
 /*!
@@ -170,7 +170,7 @@ void TM1638plus::display7Seg(uint8_t position, uint8_t value) { // call 7-segmen
 	@param ascii The ASCII value from font table  to display 
 */
 void TM1638plus::displayASCII(uint8_t position, uint8_t ascii) {
-  display7Seg(position, pFontSevenSegptr[ascii - TM_ASCII_OFFSET]);
+	display7Seg(position, pFontSevenSegptr[ascii - TM_ASCII_OFFSET]);
 }
 
  /*!
@@ -180,27 +180,27 @@ void TM1638plus::displayASCII(uint8_t position, uint8_t ascii) {
 */
 void TM1638plus::displayHex(uint8_t position, uint8_t hex) 
 {
-    uint8_t offset = 0;
-    hex = hex % 16;
-    if (hex <= 9)
-    {
-        display7Seg(position, pFontSevenSegptr[hex + TM_HEX_OFFSET]);
-        // 16 is offset in reduced ASCII table for 0 
-    }else if ((hex >= 10) && (hex <=15))
-    {
-        // Calculate offset in reduced ASCII table for AbCDeF
-        switch(hex) 
-        {
-         case 10: offset = 'A'; break;
-         case 11: offset = 'b'; break;
-         case 12: offset = 'C'; break;
-         case 13: offset = 'd'; break;
-         case 14: offset = 'E'; break;
-         case 15: offset = 'F'; break;
-        }
-        display7Seg(position, pFontSevenSegptr[offset-TM_ASCII_OFFSET]);
-    }
-    
+		uint8_t offset = 0;
+		hex = hex % 16;
+		if (hex <= 9)
+		{
+				display7Seg(position, pFontSevenSegptr[hex + TM_HEX_OFFSET]);
+				// 16 is offset in reduced ASCII table for 0 
+		}else if ((hex >= 10) && (hex <=15))
+		{
+				// Calculate offset in reduced ASCII table for AbCDeF
+				switch(hex) 
+				{
+				 case 10: offset = 'A'; break;
+				 case 11: offset = 'b'; break;
+				 case 12: offset = 'C'; break;
+				 case 13: offset = 'd'; break;
+				 case 14: offset = 'E'; break;
+				 case 15: offset = 'F'; break;
+				}
+				display7Seg(position, pFontSevenSegptr[offset-TM_ASCII_OFFSET]);
+		}
+		
 }
 
 /*!
@@ -210,21 +210,21 @@ void TM1638plus::displayHex(uint8_t position, uint8_t hex)
 */
 uint8_t TM1638plus::readButtons()
 {
-  uint8_t buttons = 0;
-  uint8_t v =0;
-  
-  gpio_put(_STROBE_IO, false);
-  sendData(TM_BUTTONS_MODE);
-  gpio_set_dir(_DATA_IO, GPIO_IN);
+	uint8_t buttons = 0;
+	uint8_t v =0;
+	
+	gpio_put(_STROBE_IO, false);
+	sendData(TM_BUTTONS_MODE);
+	gpio_set_dir(_DATA_IO, GPIO_IN);
 
-  for (uint8_t i = 0; i < 4; i++)
-  {
-    v = HighFreqshiftin(_DATA_IO, _CLOCK_IO) << i;
-    buttons |= v;
-  }
+	for (uint8_t i = 0; i < 4; i++)
+	{
+		v = HighFreqshiftin(_DATA_IO, _CLOCK_IO) << i;
+		buttons |= v;
+	}
 
-  gpio_set_dir(_DATA_IO, GPIO_OUT);
-  gpio_put(_STROBE_IO, true); 
-  return buttons;
+	gpio_set_dir(_DATA_IO, GPIO_OUT);
+	gpio_put(_STROBE_IO, true); 
+	return buttons;
 }
 

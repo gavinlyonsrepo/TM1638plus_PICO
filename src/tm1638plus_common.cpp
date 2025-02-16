@@ -7,33 +7,33 @@
 #include "pico/stdlib.h"
 #include "../include/tm1638/tm1638plus_common.h"
 
-
 /*!
 	@brief Constructor for class TM1638plus_common
-  @param strobe  GPIO STB pin
+	@param strobe  GPIO STB pin
 	@param clock  GPIO CLK pin
 	@param data  GPIO DIO pin
 */
 TM1638plus_common::TM1638plus_common(uint8_t strobe, uint8_t clock, uint8_t data)
 {
-  _STROBE_IO = strobe;
-  _DATA_IO = data;
-  _CLOCK_IO = clock;
+	_STROBE_IO = strobe;
+	_DATA_IO = data;
+	_CLOCK_IO = clock;
 }
 
 /*!
 	@brief Begin method , sets pin modes and activate display.
 */
-void TM1638plus_common::displayBegin() {
-  gpio_init(_STROBE_IO);
-  gpio_init(_DATA_IO);
-  gpio_init(_CLOCK_IO);
-  gpio_set_dir(_STROBE_IO, GPIO_OUT);
-  gpio_set_dir(_DATA_IO, GPIO_OUT);
-  gpio_set_dir(_CLOCK_IO , GPIO_OUT);
-  sendCommand(TM_ACTIVATE);
-  brightness(TM_DEFAULT_BRIGHTNESS);
-  reset();
+void TM1638plus_common::displayBegin()
+{
+	gpio_init(_STROBE_IO);
+	gpio_init(_DATA_IO);
+	gpio_init(_CLOCK_IO);
+	gpio_set_dir(_STROBE_IO, GPIO_OUT);
+	gpio_set_dir(_DATA_IO, GPIO_OUT);
+	gpio_set_dir(_CLOCK_IO, GPIO_OUT);
+	sendCommand(TM_ACTIVATE);
+	brightness(TM_DEFAULT_BRIGHTNESS);
+	reset();
 }
 
 /*!
@@ -42,9 +42,9 @@ void TM1638plus_common::displayBegin() {
 */
 void TM1638plus_common::sendCommand(uint8_t value)
 {
-  gpio_put(_STROBE_IO, false);
-  sendData(value);
-  gpio_put(_STROBE_IO, true);
+	gpio_put(_STROBE_IO, false);
+	sendData(value);
+	gpio_put(_STROBE_IO, true);
 }
 
 /*!
@@ -53,22 +53,23 @@ void TM1638plus_common::sendCommand(uint8_t value)
 */
 void TM1638plus_common::sendData(uint8_t data)
 {
-    HighFreqshiftOut(_DATA_IO, _CLOCK_IO, data);
+	HighFreqshiftOut(_DATA_IO, _CLOCK_IO, data);
 }
 
 /*!
 	@brief Reset / clear  the  display
 	@note The display is cleared by writing zero to all data segment  addresses.
 */
-void TM1638plus_common::reset() {
-  sendCommand(TM_WRITE_INC); // set auto increment mode
-  gpio_put(_STROBE_IO, false);
-  sendData(TM_SEG_ADR);  // set starting address to
-  for (uint8_t i = 0; i < 16; i++)
-  {
-    sendData(0x00);
-  }
-   gpio_put(_STROBE_IO, true);
+void TM1638plus_common::reset()
+{
+	sendCommand(TM_WRITE_INC); // set auto increment mode
+	gpio_put(_STROBE_IO, false);
+	sendData(TM_SEG_ADR); // set starting address to
+	for (uint8_t i = 0; i < 16; i++)
+	{
+		sendData(0x00);
+	}
+	gpio_put(_STROBE_IO, true);
 }
 
 /*!
@@ -77,9 +78,9 @@ void TM1638plus_common::reset() {
 */
 void TM1638plus_common::brightness(uint8_t brightness)
 {
-    uint8_t  value = 0;
-    value = TM_BRIGHT_ADR + (TM_BRIGHT_MASK & brightness);
-    sendCommand(value);
+	uint8_t value = 0;
+	value = TM_BRIGHT_ADR + (TM_BRIGHT_MASK & brightness);
+	sendCommand(value);
 }
 
 /*!
@@ -88,42 +89,44 @@ void TM1638plus_common::brightness(uint8_t brightness)
 	@param clockPin Tm1638 Clock GPIO
 	@return  Data byte
 */
-uint8_t  TM1638plus_common::HighFreqshiftin(uint8_t dataPin, uint8_t clockPin) 
+uint8_t TM1638plus_common::HighFreqshiftin(uint8_t dataPin, uint8_t clockPin)
 {
-    uint8_t value = 0;
-    uint8_t i = 0;
+	uint8_t value = 0;
+	uint8_t i = 0;
 
-    for(i = 0; i < 8; ++i) {
-        
-        gpio_put(clockPin, true);
-        busy_wait_us(TM_HFIN_DELAY);
-        value |= gpio_get(dataPin) << i;
-        gpio_put(clockPin, false);
-        busy_wait_us(TM_HFIN_DELAY);
-    }
-    return value;
+	for (i = 0; i < 8; ++i)
+	{
+
+		gpio_put(clockPin, true);
+		busy_wait_us(_HFIN_DELAY);
+		value |= gpio_get(dataPin) << i;
+		gpio_put(clockPin, false);
+		busy_wait_us(_HFIN_DELAY);
+	}
+	return value;
 }
 
 /*!
 	@brief    Shifts out a byte of data on to the Tm1638 SPI-like bus
 	@param dataPin Tm1638 Data GPIO
 	@param clockPin Tm1638 Clock GPIO
-	@param val The byte of data to shift out 
+	@param val The byte of data to shift out
 */
 void TM1638plus_common::HighFreqshiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t val)
 {
-    uint8_t i;
+	uint8_t i;
 
-    for (i = 0; i < 8; i++)  {
-        gpio_put(dataPin, !!(val & (1 << i)));  
-        gpio_put(clockPin, true);
-        busy_wait_us(TM_HFIN_DELAY);
-        gpio_put(clockPin, false);
-        busy_wait_us(TM_HFIN_DELAY);
-    }
+	for (i = 0; i < 8; i++)
+	{
+		gpio_put(dataPin, !!(val & (1 << i)));
+		gpio_put(clockPin, true);
+		busy_wait_us(_HFIN_DELAY);
+		gpio_put(clockPin, false);
+		busy_wait_us(_HFIN_DELAY);
+	}
 }
 
- /**< Font Data Table , map of ASCII values/table to 7-segment, offset to position 32. */
+/**< Font Data Table , map of ASCII values/table to 7-segment, offset to position 32. */
 static const uint8_t SevenSeg[] = {
 	0x00, /* (space) */
 	0x86, /* ! */
@@ -222,6 +225,4 @@ static const uint8_t SevenSeg[] = {
 	0x01, /* ~ */
 };
 
-
-const uint8_t * pFontSevenSegptr = SevenSeg; /**<  Pointer to the seven segment font data table */
-
+const uint8_t *pFontSevenSegptr = SevenSeg; /**<  Pointer to the seven segment font data table */
