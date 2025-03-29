@@ -1,47 +1,46 @@
 /*!
-	@file     main.cpp
-	@author   Gavin Lyons
+	@file   main.cpp
+	@author Gavin Lyons
 	@brief
-		 MODEL 3 demo file library for  TM1638 module(8 bicolour green and red LEDs & 8 pushbuttons).
+		 Demo file library for TM1638 module(LED & KEY). MODEL 1
 	@note
-		 Called Model 3 in this library.  This model is labelled LKM1638 or tm1638 v1.3
-		Carries out series of tests demonstrating rp2040 PICO library TM1638plus_PICO.
-
-		TESTS:
-
-	0.   TEST 0 Reset
-	1.   TEST 1 Brightness
-	2.   TEST 2 ASCII display
-	3.   TEST 3 Set a single segment
-	4.   TEST 4 Hex digits
-	5.   TEST 5 Text String with Decimal point
-	6.   TEST 6 TEXT + ASCII combo
-	7.   TEST 7 Integer Decimal number
-	8.   TEST 8 Text String + Float
-	9.   TEST 9 Text String + decimal number
-	10. TEST 10 Multiple dots
-	11. TEST 11 Display Overflow
-	12. TEST 12 Scrolling text
-	13. TEST 13 Green + red LEDS, setLED and setLEDs functions.
-	14. TEST 14 Buttons to serial monitor
+		Carries out series of tests to demo PICO library, tm1638 device
+	@test
+		-#  TEST 0 Reset
+		-#  TEST 1 Brightness
+		-#  TEST 2 ASCII display
+		-#  TEST 3 Set a single segment
+		-#  TEST 4 Hex digits
+		-#  TEST 5 Text String with Decimal point
+		-#  TEST 6 TEXT + ASCII combo
+		-#  TEST 7 Integer Decimal number
+		-#  TEST 8 Text String + Float
+		-#  TEST 9 Text String + decimal number
+		-#  TEST 10 Multiple dots
+		-#  TEST 11 Display Overflow
+		-#  TEST 12 Scrolling text
+		-#  TEST 13 setLED and setLEDs method
+		-#  TEST 14 Buttons + LEDS
 */
 
 #include "pico/stdlib.h"
-#include "tm1638/tm1638plus.h" //include the library
+#include "displaylib_LED_PICO/tm1638plus_model1.hpp"
 
-// GPIO I/O pins on the PICO connected to strobe, clock, data,
+///@cond
+
+// GPIO I/O pins on the  PICO connected to strobe, clock, data,
 // pick on any I/O you want.
 #define STROBE_TM 2 // strobe = GPIO connected to strobe line of module
 #define CLOCK_TM 3	// clock = GPIO connected to clock line of module
 #define DIO_TM 4	// data = GPIO connected to data line of module
 
 // Constructor object (GPIO STB , GPIO CLOCK , GPIO DIO)
-TM1638plus tm(STROBE_TM, CLOCK_TM, DIO_TM);
+TM1638plus_model1 tm(STROBE_TM, CLOCK_TM, DIO_TM);
 
 // Some vars and defines for the tests.
 #define myTestDelay 5000
+#define myTestDelay3 3000
 #define myTestDelay1 1000
-uint8_t testcount = 0;
 
 void Test0(void);
 void Test1(void);
@@ -62,60 +61,28 @@ void doLEDs(uint8_t value);
 
 int main()
 {
-
+	// Init USB output 38400 baud (optional)
+	stdio_init_all();
 	tm.displayBegin();
 	busy_wait_ms(myTestDelay1);
-	// Test 0 reset
-	Test0();
-	while (true)
-	{
-		switch (testcount)
-		{
-		case 1:
-			Test1();
-			break; // Brightness
-		case 2:
-			Test2();
-			break; // ASCII display
-		case 3:
-			Test3();
-			break; // Set a single segment
-		case 4:
-			Test4();
-			break; // Hex digits
-		case 5:
-			Test5();
-			break; // Text String with Decimal point
-		case 6:
-			Test6();
-			break; // TEXT + ASCII combo
-		case 7:
-			Test7();
-			break; // Integer Decimal number
-		case 8:
-			Test8();
-			break; // Text String + Float hack
-		case 9:
-			Test9();
-			break; // Text String + decimal number
-		case 10:
-			Test10();
-			break; // Multiple Decimal points
-		case 11:
-			Test11();
-			break; // Display Overflow
-		case 12:
-			Test12();
-			break; // Scrolling text
-		case 13:
-			Test13();
-			break; // setLED and setLEDs
-		case 14:
-			Test14();
-			break; // Buttons + LEDS stays here forever
-		}
-		testcount++;
-	}
+	printf("Test Start\n");
+	Test0();   // Test 0 reset
+	Test1();   // Brightness
+	Test2();   // ASCII display
+	Test3();   // Set a single segment
+	Test4();   // Hex digits
+	Test5();   // Text String with Decimal point
+	Test6();   // TEXT + ASCII combo
+	Test7();   // Integer Decimal number
+	Test8();   // Text String + Float hack
+	Test9();   // Text String + decimal number
+	Test10();  // Multiple Decimal points
+	Test11();  // Display Overflow
+	Test12();  // Scrolling text
+	Test13();  // setLED and setLEDs
+	Test14();  // Buttons + LEDS 
+	tm.displayClose();
+	printf("Test End\n");
 }
 
 void Test0()
@@ -155,11 +122,12 @@ void Test2()
 void Test3()
 {
 	// TEST 3 single segment (digit position, (dp)gfedcba)
-	//  (dp)gfedcba =  seven segments positions
+	// (dp)gfedcba =  seven segments positions
+	// Displays a single seg in (dp)gfedcba) in each  pos 0-7
 	uint8_t pos = 0;
 	for (pos = 0; pos < 8; pos++)
 	{
-		tm.display7Seg(pos, 1 << (7 - pos)); // Displays a single seg in (dp)gfedcba) in each  pos 0-7
+		tm.display7Seg(pos, 1<<(7-pos)); 
 		busy_wait_ms(myTestDelay1);
 	}
 }
@@ -325,52 +293,39 @@ void Test13()
 	// Test 13 LED display
 	uint8_t LEDposition = 0;
 
-	// Test 13A Turn on green leds with setLED
+	// Test 13A Turn on redleds one by one, left to right, with setLED where 0 is L1 and 7 is L8 (L8 RHS of display)
 	for (LEDposition = 0; LEDposition < 8; LEDposition++)
 	{
-		tm.setLED(LEDposition, tm.TM_GREEN_LED);
+		tm.setLED(LEDposition, 1);
 		busy_wait_ms(500);
-		tm.setLED(LEDposition, tm.TM_OFF_LED);
+		tm.setLED(LEDposition, 0);
 	}
 
-	// Test 13b turn on red LEDs with setLED
-	for (LEDposition = 0; LEDposition < 8; LEDposition++)
-	{
-		tm.setLED(LEDposition, tm.TM_RED_LED);
-		busy_wait_ms(500);
-		tm.setLED(LEDposition, tm.TM_OFF_LED);
-	}
+	// TEST 13b test setLEDs function (0xLXX) ( L8-L1 , XX )
+	// NOTE passed L8-L1 and on display L8 is on right hand side. i.e. 0x01 turns on L1. LXXX XXXX
 
-	// TEST 13c
-	// test setLEDs function (0xgreenred) (0xGGRR) (LED8-LED1, LED8-LED1)
-	// Upper byte switch LED green colour ON, lower byte = switch LED red colour ON
-	// NB Note on the unit, LED8 is on the right hand side so result is mirrored.
-	// Example:
-	// E0 = green on 07 = red on
-	// E0  = 1110 0000 , 07 = 0000 0111 = 11100111 = GGGXXRRR = LED8-LED1
-	// Shows on display as  LED1-LED8 turns on RRRXXGGG as LED 8 is on right hand side.
-
-	tm.setLEDs(0xE007); // L1-L8 turns on RRRXXGGG on display
+	tm.setLEDs(0xFF); //  all LEDs on 
 	busy_wait_ms(3000);
-
-	tm.setLEDs(0xF00F); // L1-L8 turns on RRRRGGGG on display
+	tm.setLEDs(0x01); // Displays as LXXX XXXX (L1-L8) , NOTE on display L8 is on right hand side.
 	busy_wait_ms(3000);
-	tm.setLEDs(0xFE01); // L1-L8 turns on RGGGGGGG on display
+	tm.setLEDs(0xF0); //  Displays as XXXX LLLL (L1-L8) , NOTE on display L8 is on right hand side.
 	busy_wait_ms(3000);
-	tm.setLEDs(0x00FF); // all red   RRRRRRR
+	tm.setLEDs(0x07); //  Displays as LLLX XXXX (L1-L8) , NOTE on display L8 is on right hand side.
 	busy_wait_ms(3000);
-	tm.setLEDs(0xFF00); // all green GGGGGGG
+	tm.setLEDs(0x41); //  Displays as LXXX XXLX (L1-L8) , NOTE on display L8 is on right hand side.
 	busy_wait_ms(3000);
-	tm.setLEDs(0x0000); // all off
+	tm.setLEDs(0x00); // all off
 	busy_wait_ms(3000);
 }
 
 void Test14()
 {
 	// Test 14 buttons and LED test, press switch number S-X to turn on LED-X, where x is 1-8.
+	// The HEx value of switch is also sent to Serial port.
+	printf("Buttons test will exit when user presses S1 and S8 together. \n");
 	tm.displayText("buttons ");
 	busy_wait_ms(2000);
-	while (1) // Loop here forever
+	while (1) // Loop until user presses S1 and S8 together.
 	{
 		uint8_t buttons = tm.readButtons();
 		/* buttons contains a byte with values of button s8s7s6s5s4s3s2s1
@@ -385,8 +340,12 @@ void Test14()
 		 0x80 : S8 Pressed  1000 0000
 		*/
 		doLEDs(buttons);
-		tm.displayIntNum(buttons, false, tm.AlignTextRight);
+		tm.displayIntNum(buttons, true);
 		busy_wait_ms(250);
+		if (buttons == 0x81){
+			busy_wait_ms(1000);
+			break;
+		}
 	}
 }
 
@@ -399,3 +358,5 @@ void doLEDs(uint8_t value)
 		value = value >> 1;
 	}
 }
+
+///@endcond

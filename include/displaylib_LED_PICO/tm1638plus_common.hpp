@@ -1,32 +1,24 @@
 /*!
-	@file     tm1638plus_common.h
+	@file     tm1638plus_common.hpp
 	@author   Gavin Lyons
-	@brief    PICO library Tm1638plus_PICO, Header file for common data and functions between model classes.
-	@note     Project URL https://github.com/gavinlyonsrepo/TM1638plus_PICO
+	@brief    tm1638  PICO driver. Header file for common data and functions between model classes.
 */
 
 #ifndef TM1638PLUS_COMMON_H
 #define TM1638PLUS_COMMON_H
 
-extern const uint8_t *pFontSevenSegptr; /**<  Pointer to the seven segment font data table */
+#include "seven_segment_font_data.hpp"
+#include <cstdio>
 
 /*!
 	@brief  The base Class , used to store common data & functions for all models types.
 */
-class TM1638plus_common
+class TM1638plus_common : protected SevenSegmentFont
 {
 
 public:
 	// Constructor
 	TM1638plus_common(uint8_t strobe, uint8_t clock, uint8_t data);
-
-	/*! Led color values  */
-	enum TMLedColor_e : uint8_t
-	{
-		TM_OFF_LED = 0x00,	 /**< Switch off LED */
-		TM_GREEN_LED = 0x01, /**< Turn LED green color (Model 3 only) */
-		TM_RED_LED = 0x02	 /**< Turn LED red color (Model 3 only) */
-	};
 
 	/*! Alignment of text on display */
 	enum AlignTextType_e : uint8_t
@@ -36,6 +28,7 @@ public:
 	};
 
 	void displayBegin();
+	void displayClose();
 	void reset(void);
 	void brightness(uint8_t brightness);
 
@@ -59,13 +52,8 @@ protected:
 	static constexpr uint8_t TM_DEFAULT_BRIGHTNESS = 0x02; /**< Brightness can be 0x00 to 0x07, 0x00 is least bright */
 	static constexpr uint8_t TM_DISPLAY_SIZE = 8;		   /**< Size of display in digits */
 
-	/*! ASCII table calculation constants */
-	enum TMConstants_e : uint8_t
-	{
-		TM_ASCII_OFFSET = 32, /**< ASCII table offset to jump over first missing 32 chars */
-		TM_HEX_OFFSET = 16,	  /**< ASCII table offset to reach the number position */
-		TM_DOT_MASK_DEC = 128 /**< 0x80 Mask to switch on decimal point in seven-segment */
-	};
+		
+	const uint8_t TM_DOT_MASK_DEC = 0x80; /**< Mask to switch on decimal point in seven-segment */
 
 	uint8_t HighFreqshiftin(uint8_t dataPin, uint8_t clockPin);
 	void HighFreqshiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t val);

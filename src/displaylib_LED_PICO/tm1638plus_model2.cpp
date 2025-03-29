@@ -1,20 +1,20 @@
 /*!
-	@file     tm1638plus_Model2.cpp
-	@author   Gavin Lyons
-	@brief    rp2040 PICO library Tm1638plus, Source file for TM1638 module((16 KEY 16 pushbuttons).) Model 2.
+	@file   tm1638plus_model2.cpp
+	@author Gavin Lyons
+	@brief  PICO library,Source file for TM1638 module(16 KEY 16 pushbuttons. Model 2.
 */
 
 #include "pico/stdlib.h"
-#include "../include/tm1638/tm1638plus_model2.h" //include the library
+#include "displaylib_LED_PICO/tm1638plus_model2.hpp" //include the library
 
 /*!
-	@brief Constructor for class TM1638plus_Model2
+	@brief Constructor for class TM1638plus_model2
 	@param strobe GPIO STB pin
 	@param clock  GPIO CLK pin
 	@param data  GPIO DIO pin
 	@param  swap_nibbles default false, if true, swaps nibbles on display byte.
 */
-TM1638plus_Model2::TM1638plus_Model2(uint8_t strobe, uint8_t clock, uint8_t data, bool swap_nibbles) : TM1638plus_common(strobe, clock, data)
+TM1638plus_model2::TM1638plus_model2(uint8_t strobe, uint8_t clock, uint8_t data, bool swap_nibbles) : TM1638plus_common(strobe, clock, data)
 {
 
 	_SWAP_NIBBLES = swap_nibbles;
@@ -28,7 +28,7 @@ TM1638plus_Model2::TM1638plus_Model2(uint8_t strobe, uint8_t clock, uint8_t data
 		for segment parameter a is 0 , dp is 7 , segment Value is which segments are off or on for each digit.
 		To to set all "a" on send (0x00,0xFF). To set all segment "g" off (0x06,0X00)
 */
-void TM1638plus_Model2::DisplaySegments(uint8_t segment, uint8_t digit)
+void TM1638plus_model2::DisplaySegments(uint8_t segment, uint8_t digit)
 {
 	if (_SWAP_NIBBLES == true)
 	{
@@ -57,7 +57,7 @@ void TM1638plus_Model2::DisplaySegments(uint8_t segment, uint8_t digit)
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble. Converts to string internally.
 */
-void TM1638plus_Model2::DisplayHexNum(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model2::DisplayHexNum(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
 {
 	char valuesUpper[TM_DISPLAY_SIZE + 1];
 	char valuesLower[TM_DISPLAY_SIZE / 2 + 1];
@@ -88,7 +88,7 @@ void TM1638plus_Model2::DisplayHexNum(uint16_t numberUpper, uint16_t numberLower
 	@param TextAlignment  left or right text alignment on display.
 	@note Converts to string internally
 */
-void TM1638plus_Model2::DisplayDecNum(unsigned long number, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model2::DisplayDecNum(unsigned long number, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
 {
 	char values[TM_DISPLAY_SIZE + 1];
 	char TextDisplay[5] = "%";
@@ -119,7 +119,7 @@ void TM1638plus_Model2::DisplayDecNum(unsigned long number, uint8_t dots, bool l
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble.
 */
-void TM1638plus_Model2::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model2::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
 {
 	char valuesUpper[TM_DISPLAY_SIZE + 1];
 	char valuesLower[TM_DISPLAY_SIZE / 2 + 1];
@@ -149,9 +149,18 @@ void TM1638plus_Model2::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numbe
 	@note
 		Takes in string , converts it to ASCII using the font and masks for the decimal point.
 		Then passes array of eight ASCII bytes to DisplayValues function
+		@return 0 for success, -2 for null ptr, -4 for ascii character outside font range
 */
-void TM1638plus_Model2::DisplayStr(const char *string, uint16_t dots)
+int TM1638plus_model2::DisplayStr(const char *string, uint16_t dots)
 {
+	// Check for null pointer
+	if (string== nullptr) 
+	{
+		printf("Error: DisplayStr 1: String is a null pointer.\n");
+		return -2;
+	}
+
+	const uint8_t *font = SevenSegmentFont::pFontSevenSegptr();
 	uint8_t values[TM_DISPLAY_SIZE];
 	bool done = false;
 	uint8_t Result = 0;
@@ -161,13 +170,18 @@ void TM1638plus_Model2::DisplayStr(const char *string, uint16_t dots)
 	{
 		if (!done && string[i] != '\0')
 		{
+			if (string[i] < _ASCII_FONT_OFFSET || string[i] >=  _ASCII_FONT_END)
+			{
+				printf("Error: DisplayStr: Character '%c' (ASCII %u) is outside font range.\n", string[i], string[i]);
+				return -4; // Error: Invalid character outside font range
+			}
 			if (dots >> (7 - i) & 1)
 			{ // if dots bit is set for that position apply the mask to turn on dot(0x80).
-				Result = pFontSevenSegptr[string[i] - TM_ASCII_OFFSET];
+				Result = font[string[i] - _ASCII_FONT_OFFSET];
 				values[i] = (Result | TM_DOT_MASK_DEC); // apply the Dot bitmask to value extracted from ASCII table
 			}
 			else
-				values[i] = pFontSevenSegptr[string[i] - TM_ASCII_OFFSET];
+				values[i] = font[string[i] - _ASCII_FONT_OFFSET];
 		}
 		else
 		{
@@ -176,6 +190,7 @@ void TM1638plus_Model2::DisplayStr(const char *string, uint16_t dots)
 		}
 	}
 	ASCIItoSegment(values);
+	return 0;
 }
 
 /*!
@@ -184,15 +199,15 @@ void TM1638plus_Model2::DisplayStr(const char *string, uint16_t dots)
 		 Then calls DisplaySegments() method to display segments on display
 	@param values An array of 8 ASCII bytes
 	@note
-	byte 0 represents a in segment and then each bit represents the a segment in each digit.
-	So for "00000005" is converted by DisplayStr to ASCII  hex"3F 3F 3F 3F 3F 3F 3F 6D" where left is first digit.
-	this is converted to hex "FF FE FF FF FE FF 01 00" by ASCIItoSegment,  Where left is first segment.
-	So "a" segment is turned on for all digits and "b" is on for all except last digit.
-	The bits are  mapping below abcdefg(dp) = 01234567 ! .
-	See for mapping of seven segment to digit https://en.wikipedia.org/wiki/Seven-segment_display
-	We have to do this as TM1638 model 2 is addressed by segment not digit unlike Model 1&3
+		byte 0 represents a in segment and then each bit represents the a segment in each digit.
+		So for "00000005" is converted by DisplayStr to ASCII  hex"3F 3F 3F 3F 3F 3F 3F 6D" where left is first digit.
+		this is converted to hex "FF FE FF FF FE FF 01 00" by ASCIItoSegment,  Where left is first segment.
+		So "a" segment is turned on for all digits and "b" is on for all except last digit.
+		The bits are  mapping below abcdefg(dp) = 01234567 ! .
+		See for mapping of seven segment to digit https://en.wikipedia.org/wiki/Seven-segment_display
+		We have to do this as TM1638 model 2 is addressed by segment not digit unlike Model 1&3
 */
-void TM1638plus_Model2::ASCIItoSegment(const uint8_t values[])
+void TM1638plus_model2::ASCIItoSegment(const uint8_t values[])
 {
 	for (uint8_t segment = 0; segment < TM_DISPLAY_SIZE; segment++)
 	{
@@ -212,7 +227,7 @@ void TM1638plus_Model2::ASCIItoSegment(const uint8_t values[])
 		 User may have to debounce buttons depending on application..
 		 model 2 example here in ADC file TM1638plus_ADC_TEST_Model2.ino
 */
-unsigned char TM1638plus_Model2::ReadKey16()
+unsigned char TM1638plus_model2::ReadKey16()
 {
 	unsigned char c[4], i, key_value = 0;
 	gpio_put(_STROBE_IO, false);
@@ -249,7 +264,7 @@ unsigned char TM1638plus_Model2::ReadKey16()
 		 Can detect multiple key presses. However,  See notes section in readme regarding,
 		 problems with seven segment display when pressing certain keys in combination.
 */
-uint16_t TM1638plus_Model2::ReadKey16Two()
+uint16_t TM1638plus_model2::ReadKey16Two()
 {
 
 	uint16_t key_value = 0;

@@ -1,29 +1,29 @@
 /*!
-	@file     main.cpp
-	@author   Gavin Lyons
+	@file   main.cpp
+	@author Gavin Lyons
 	@brief
 		 demo file library for MODEL 2 TM1638 module(16 KEY 16 pushbuutons).
 	@note
-		Carries out series of tests demonstrating rp2040 PICO  library TM1638plus_PICO.
+		Carries out series of tests demonstrating PICO library tm1638 device.
 		The tests will increment automatically with exception of test9, to enter press S16 during test8
-
-		TESTS
-
-		1. TEST0 = reset function test
-		2. TEST1 =  decimal numbers
-		3. TEST2 =  Hexadecimal number
-		4. TEST3 = manually set segments
-		5. TEST4 = Display  strings
-		6. TEST5  =  ASCII to segments ( no reference to font table)
-		7. TEST6 = Brightness control
-		8. TEST7 = Scroll text example
-		9. TEST8 = Push buttons ReadKey16() buttons function , press 16 to goto test9
-		10. TEST9 = Push buttons ReadKeys16Two() alternate  buttons function
-
+	@test
+		-# TEST0 = reset function test
+		-# TEST1 =  decimal numbers
+		-# TEST2 =  Hexadecimal number
+		-# TEST3 = manually set segments
+		-# TEST4 = Display  strings
+		-# TEST5  =  ASCII to segments ( no reference to font table)
+		-# TEST6 = Brightness control
+		-# TEST7 = Scroll text example
+		-# TEST8 = Push buttons ReadKey16() buttons function , press 16 to goto test9
+		-# TEST9 = Push buttons ReadKeys16Two() alternate  buttons function
 */
 
 #include "pico/stdlib.h"
-#include "tm1638/tm1638plus_model2.h" //include the library
+#include "displaylib_LED_PICO/tm1638plus_model2.hpp"
+
+
+///@cond
 
 // GPIO I/O pins on the PICO connected to strobe, clock, data, pick on any I/O pin you want.
 #define STROBE_TM 4		   // strobe = GPIO connected to strobe line of module
@@ -32,7 +32,7 @@
 bool swap_nibbles = false; // Default is false if left out, see issues section in readme at URL
 
 // Constructor object Init the module
-TM1638plus_Model2 tm(STROBE_TM, CLOCK_TM, DIO_TM, swap_nibbles);
+TM1638plus_model2 tm(STROBE_TM, CLOCK_TM, DIO_TM, swap_nibbles);
 // For test setup
 #define myTestDelay 5000
 #define myTestDelay1 1000
@@ -52,46 +52,24 @@ void Test9(void);
 
 int main()
 {
-
+	// Init USB output 38400 baud (optional)
+	stdio_init_all();
 	tm.displayBegin(); // Init the module
-	busy_wait_ms(myTestDelay2);
+	busy_wait_ms(myTestDelay1);
+	printf("Test Start\n");
 	// Test 0 reset test
 	tm.reset();
-
-	while (1)
-	{
-		testcount++;
-		switch (testcount)
-		{
-		case 1:
-			Test1();
-			break; // Test 1 decimal numbers
-		case 2:
-			Test2();
-			break; // Test 2 Hexadecimal number
-		case 3:
-			Test3();
-			break; // Test 3a 3b & 3C using DisplaySegments method
-		case 4:
-			Test4();
-			break; // Test 4 strings
-		case 5:
-			Test5();
-			break; // Test 5 ASCIItoSegment method
-		case 6:
-			Test6();
-			break; // Test 6  Brightness and reset
-		case 7:
-			Test7();
-			break; // Test 7 scroll text
-		case 8:
-			Test8();
-			break; // Test 8 Buttons , ReadKey16() returns byte 1-16 decimal, press S16 to goto test9
-		case 9:
-			Test9();
-			break; // Test 9 Buttons , Readkey16Two() alternate buttons function.
-		}
-	}
+	Test1(); // Test 1 decimal numbers
+	Test2(); // Test 2 Hexadecimal number
+	Test3(); // Test 3a 3b & 3C using DisplaySegments method
+	Test4(); // Test 4 strings
+	Test5(); // Test 5 ASCIItoSegment method
+	Test6(); // Test 6  Brightness and reset
+	Test7(); // Test 7 scroll text
+	Test8(); // Test 8 Buttons , ReadKey16() returns byte 1-16 decimal, press S16 to goto test9
+	Test9(); // Test 9 Buttons , Readkey16Two() alternate buttons function.
+	tm.displayClose(); 
+	printf("Test End\n");
 }
 
 void Test1(void)
@@ -262,6 +240,7 @@ void Test7(void)
 
 void Test8(void)
 {
+	printf("Test 8 Press S16 to move to test 9\n");
 	unsigned char buttons;
 	while (1)
 	{
@@ -283,6 +262,7 @@ void Test8(void)
 // returns word with binary value of switch. S16 = Bit 15 , S15 = bit 14 etc
 void Test9(void)
 {
+	printf("Test 9 Press S1 with S16 to quit\n");
 	uint16_t buttons = 0;
 	tm.DisplayStr("buttons2", 0);
 	busy_wait_ms(myTestDelay2);
@@ -299,5 +279,12 @@ void Test9(void)
 		buttons = tm.ReadKey16Two();
 		tm.DisplayHexNum(0x0000, buttons, 0x00, true);
 		busy_wait_ms(myTestDelay2);
+		// user  pressing S1 & S16 quit
+		if (buttons == 0x8001){
+			busy_wait_ms(myTestDelay2);
+			break;
+		}
 	}
 }
+
+///@endcond

@@ -1,72 +1,43 @@
 [![Website](https://img.shields.io/badge/Website-Link-blue.svg)](https://gavinlyonsrepo.github.io/)  [![Rss](https://img.shields.io/badge/Subscribe-RSS-yellow.svg)](https://gavinlyonsrepo.github.io//feed.xml)  [![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/paypalme/whitelight976)
 
-# TM1638plus_PICO
-
-## Table of contents
-
-
-  * [Overview](#overview)
-  * [Examples](#examples)
-  * [Hardware](#hardware)
-  * [See Also](#see-also)
+# displaylib_LED_PICO
 
 ## Overview
 
-* Name: TM1638plus_PICO
+* Name: displaylib_LED_PICO
 * Author: Gavin Lyons.
 
 * Description:
 
-A Raspberry pi PICO, C++ SDK, RP2040 library to display data on a 8-digit TM1638 seven segment module.
-
-* Developed on
+C++ SDK Library to support LED segment display modules
+for the Raspberry PI PICO
+	
+* Developed on Toolchain:
 	1. Raspberry pi PICO RP2040
-	2. SDK C++ complier G++ for arm-none-eabi
-	3. CMAKE VScode
+	2. SDK(1.4.0) C++20
+	3. compiler G++ for arm-none-eabi((15:10.3-2021.07-4) 
+	4. CMAKE(VERSION 3.18) , VScode(1.84.2)
+	5. Linux Mint 22.1
+	
 
-## Examples
+* [URL project github link](https://github.com/gavinlyonsrepo/displaylib_LED_PICO)
 
-There are three examples files(main.cpp) in example folder, To select the one that builds 
-comment it's path in, in the CMakeLists.txt file section add_executable section.
-Comment one path in and one only.
+## Documentation
 
-|  List No | example file name  | Model Num | Desc|
-| ------ | ------ |  ------ | ------ |
-| 1 | Model1_TESTS/main.cpp | 1 | test routines for model 1 |
-| 2 | Model2_TESTS/main.cpp | 2 | test routines for model 2 |
-| 3 | Model3_TESTS/main.cpp | 3 | test routines for model 3 |
+### Supported devices
 
-## Hardware
+| Component name | Type | Interface | Readme URL link |
+| -------- | ---------- | --------- | ---------- |
+| TM1637 |7 segment LED displau module|GPIO| [Readme](extra/doc/tm1637/README.md)|
+| TM1638 |7 segment LED displau module|GPIO| [Readme](extra/doc/tm1638/README.md)|
 
-Connections to RPI-PICO, pick any GPIO you want and change it the main.cpp:
 
-1. GPIO = STB = Strobe
-2. GPIO  = CLK  = Clock
-3. GPIO = DIO = Data input / output
-4. GND
-5. VCC 3.3V ( If VCC is set to 5V, level shift GPIO to 3.3V or damage could result.)
+### API Documentation
 
-This library supports three variants of the TM1638,
-which for purposes of this documentation,
-will be named Model 1 ,Model 2 and Model 3. 
-Pictured below from left to right.
+The code is commented for doxygen and a application programming interface can be created using the doxygen tool.
 
-![ module pics ](https://github.com/gavinlyonsrepo/TM1638plus/blob/master/extra/images/tm16383.jpg)
+## File system
 
-| Model No | Module Name | LEDS | Push buttons |
-| ------ | ------ |  ------ | ------ |
-| 1 | TM1638 LED & KEY | 8 red only | 8 |
-| 2 | TM1638 KEYS, QYF  | 0 | 16 |
-| 3 | TM1638 V1.3 or LKM1638  | 8 bi color,  red and green  | 8 |
+Class Hierarchy:
 
-## See Also
-
-This library is a port of my Arduino Library. There you will find the full documentation
-including the API, which is near identical to PICO except ::
- 
-1. Extra examples files for Arduino and examples are .ino files.
-2. High freq data member flag is not needed in PICO library.
-3. PICO constructor has GPIO parameters in base class.
-4. In file dependancy graphs ,High level file includes will differ. #include "pico/stdlib.h" will be missing etc.
-
-[ Arduino github Link ](https://github.com/gavinlyonsrepo/TM1638plus)
+TODO add image
