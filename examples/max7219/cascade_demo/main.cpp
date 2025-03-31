@@ -32,14 +32,14 @@
 	int8_t CS   = 2 ;  
 	uint32_t SCLK_FREQ =  8000 ; // Spi freq in KiloHertz , 1000 = 1Mhz
 	// Constructor object 
-	MAX7219_SS_RPI myMAX(SCLK, CS, SDIN , SCLK_FREQ, spi0);
+	MAX7219plus_model5 myMAX(SCLK, CS, SDIN , SCLK_FREQ, spi0);
 #else // Software SPI setup
 	int8_t SDIN = 4; 
 	int8_t SCLK = 3; 
 	int8_t CS   = 2 ;  
 	uint16_t CommDelay = 0; //uS software SPI delay.
 	// Constructor object 
-	MAX7219_SS_RPI myMAX(SCLK, CS,SDIN, CommDelay);
+	MAX7219plus_model5 myMAX(SCLK, CS,SDIN, CommDelay);
 #endif
 
 // Main loop

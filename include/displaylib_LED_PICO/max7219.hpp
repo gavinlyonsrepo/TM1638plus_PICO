@@ -17,11 +17,11 @@
 /*!
 	@brief  Drive MAX7219 seven segment displays
 */
-class MAX7219_SS_RPI : protected SevenSegmentFont
+class MAX7219plus_model5 : protected SevenSegmentFont
 {
 public:
-	MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect, uint8_t data, uint16_t CommDelay);
-	MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect, uint8_t data, uint32_t baudrate, spi_inst_t* spiInterface);
+	MAX7219plus_model5(uint8_t clock, uint8_t chipSelect, uint8_t data, uint16_t CommDelay);
+	MAX7219plus_model5(uint8_t clock, uint8_t chipSelect, uint8_t data, uint32_t baudrate, spi_inst_t* spiInterface);
 
 	/*! The decode-mode register sets BCD code B or no-decode operation for each digit */
 	enum DecodeMode_e : uint8_t

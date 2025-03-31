@@ -28,9 +28,9 @@ Hardware or software SPI, Shutdown mode, test mode and Brightness control suppor
 
 Example files list:
 
-| List No | Example file name  | Description | 
-| ------ | ------ |   ------ | ----- |
-| 1 | src/tests/main.cpp | test sequence  |
+| List No | Example file name | Description | 
+| ------ | ------ | ------ |
+| 1 | src/tests/main.cpp | test sequence |
 | 2 | src/bcdmode/main.cpp | Shows use of BCD built-in font |
 | 3 | src/cascade_demo/main.cpp | simple Demo showing use of cascaded displays |
 

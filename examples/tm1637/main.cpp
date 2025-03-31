@@ -44,8 +44,7 @@ const uint StatusLEDPin = 25; // PICO on_board Status LED
 #define  SEMI_COLON_ON (0x40)
 
 // Constructor object 
-TM1637plus_Model4 myTM(CLOCK_TM, DIO_TM, COMM_DELAY_US, NUM_OF_DIGITS);
-
+TM1637plus_model4 myTM(CLOCK_TM, DIO_TM, COMM_DELAY_US, NUM_OF_DIGITS);
 
 // === Function Prototypes ===
 void Setup(void);

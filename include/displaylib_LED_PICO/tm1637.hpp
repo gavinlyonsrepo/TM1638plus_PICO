@@ -16,11 +16,11 @@
 /*!
 	@brief Class for TM1637 Model 4
 */
-class TM1637plus_Model4 : protected SevenSegmentFont{
+class TM1637plus_model4 : protected SevenSegmentFont{
 
 public:
 
-	TM1637plus_Model4 (uint8_t clock, uint8_t data , int delay, int DisplaySize) ;
+	TM1637plus_model4 (uint8_t clock, uint8_t data , int delay, int DisplaySize) ;
 	void displayBegin(void);
 	void displayClose(void);
 	void displayClear(void);

@@ -8,14 +8,14 @@
 // Public methods
 
 /*!
-	@brief Constructor for class MAX7219_SS_RPI software SPI
+	@brief Constructor for class MAX7219plus_model5 software SPI
 	@param clock CLk pin
 	@param chipSelect CS pin
 	@param data DIO pin
 	@param CommDelay uS Software SPI communications delay
 	@note overloaded this one is for Software SPI
 */
-MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data, uint16_t CommDelay)
+MAX7219plus_model5::MAX7219plus_model5(uint8_t clock, uint8_t chipSelect , uint8_t data, uint16_t CommDelay)
 {
 	_Display_SCLK = clock;
 	_Display_CS  = chipSelect;
@@ -25,7 +25,7 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data,
 }
 
 /*!
-	@brief Constructor for class MAX7219_SS_RPI hardware SPI
+	@brief Constructor for class MAX7219plus_model5 hardware SPI
 	@param clock CLk pin
 	@param chipSelect CS pin
 	@param data DIO pin
@@ -33,7 +33,7 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data,
 	@param spiInterface Spi interface, spi0 spi1 etc
 	@note overloaded this one is for Hardware SPI 
 */
-MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data, uint32_t baudrate, spi_inst_t* spiInterface )
+MAX7219plus_model5::MAX7219plus_model5(uint8_t clock, uint8_t chipSelect , uint8_t data, uint32_t baudrate, spi_inst_t* spiInterface )
 {
 	_Display_SCLK = clock;
 	_Display_CS  = chipSelect;
@@ -46,7 +46,7 @@ MAX7219_SS_RPI::MAX7219_SS_RPI(uint8_t clock, uint8_t chipSelect , uint8_t data,
 /*!
 	@brief End display operations, called at end of program
 */
-void MAX7219_SS_RPI::DisplayEndOperations(void)
+void MAX7219plus_model5::DisplayEndOperations(void)
 {
 	gpio_put(_Display_CS, false);
 	gpio_deinit(_Display_CS);
@@ -68,7 +68,7 @@ void MAX7219_SS_RPI::DisplayEndOperations(void)
 	@brief get value of _HardwareSPI , true hardware SPI on , false off.
 	@return _HardwareSPI , true hardware SPI on , false off.
 */
-bool MAX7219_SS_RPI::GetHardwareSPI(void)
+bool MAX7219plus_model5::GetHardwareSPI(void)
 {return _HardwareSPI;}
 
 
@@ -78,7 +78,7 @@ bool MAX7219_SS_RPI::GetHardwareSPI(void)
 	@param decodeMode Must users will use 0x00 here
 	@note when cascading supplies init display one first always!
 */
-void MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
+void MAX7219plus_model5::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
 {
 	if (_CurrentDisplayNumber == 1)
 	{
@@ -121,7 +121,7 @@ void MAX7219_SS_RPI::InitDisplay(ScanLimit_e numDigits, DecodeMode_e decodeMode)
 /*!
 	@brief Clear the display
 */
-void MAX7219_SS_RPI::ClearDisplay(void)
+void MAX7219plus_model5::ClearDisplay(void)
 {
 
 	switch(CurrentDecodeMode)
@@ -164,7 +164,7 @@ void MAX7219_SS_RPI::ClearDisplay(void)
 	@param value  The BCD character to display
 	@note sets BCD code B font (0-9, E, H, L,P, and -) Built-in font
 */
-void MAX7219_SS_RPI::DisplayBCDChar(uint8_t digit, CodeBFont_e value)
+void MAX7219plus_model5::DisplayBCDChar(uint8_t digit, CodeBFont_e value)
 {
 	WriteDisplay(digit+1, value);
 }
@@ -175,7 +175,7 @@ void MAX7219_SS_RPI::DisplayBCDChar(uint8_t digit, CodeBFont_e value)
 	@param character  The ASCII character to display
 	@param decimalPoint Is the decimal point(dp) to be set or not.
 */
-void MAX7219_SS_RPI::DisplayChar(uint8_t digit, uint8_t character , DecimalPoint_e decimalPoint)
+void MAX7219plus_model5::DisplayChar(uint8_t digit, uint8_t character , DecimalPoint_e decimalPoint)
 {
 	WriteDisplay(digit+1,ASCIIFetch(character , decimalPoint));
 }
@@ -185,7 +185,7 @@ void MAX7219_SS_RPI::DisplayChar(uint8_t digit, uint8_t character , DecimalPoint
 	@param digit The digit to set segment in, 7-0 ,7 = LHS 0 =RHS
 	@param segment The segment of seven segment to set dpabcdefg
 */
-void MAX7219_SS_RPI::SetSegment(uint8_t digit, uint8_t segment)
+void MAX7219plus_model5::SetSegment(uint8_t digit, uint8_t segment)
 {
 	WriteDisplay(digit+1, segment);
 }
@@ -198,7 +198,7 @@ void MAX7219_SS_RPI::SetSegment(uint8_t digit, uint8_t segment)
 	@note This method is overloaded, see also DisplayText(char *)
 	@return error -2 if string is null. -3 if option AlignRightZeros entered , 0 for success
 */
-int MAX7219_SS_RPI::DisplayText(char* text, TextAlignment_e TextAlignment){
+int MAX7219plus_model5::DisplayText(char* text, TextAlignment_e TextAlignment){
 
 	if (text == nullptr) 
 	{
@@ -250,7 +250,7 @@ int MAX7219_SS_RPI::DisplayText(char* text, TextAlignment_e TextAlignment){
 	@note This method is overloaded, see also DisplayText(char *, TextAlignment_e )
 	@return error -2 if string is null , 0 for success
 */
-int MAX7219_SS_RPI::DisplayText(char* text){
+int MAX7219plus_model5::DisplayText(char* text){
 
 	if (text == nullptr) 
 	{
@@ -283,7 +283,7 @@ int MAX7219_SS_RPI::DisplayText(char* text){
 		  Non supported characters printed as space ' '
 	@return error -2 if string is null , 0 for success
 */
-int MAX7219_SS_RPI::DisplayBCDText(char* text){
+int MAX7219plus_model5::DisplayBCDText(char* text){
 
 	if (text == nullptr) 
 	{
@@ -336,7 +336,7 @@ int MAX7219_SS_RPI::DisplayBCDText(char* text){
 	@brief sets the brightness of display
 	@param brightness rang 0x00 to 0x0F , 0x00 being least bright.
 */
-void MAX7219_SS_RPI::SetBrightness(uint8_t brightness)
+void MAX7219plus_model5::SetBrightness(uint8_t brightness)
 {
 	brightness &= IntensityMax;
 	WriteDisplay(MAX7219_REG_Intensity, brightness);
@@ -348,7 +348,7 @@ void MAX7219_SS_RPI::SetBrightness(uint8_t brightness)
 	@param OnOff true = Shutdown mode on , false shutdown mode off
 	@note power saving mode
 */
-void MAX7219_SS_RPI::ShutdownMode(bool OnOff)
+void MAX7219plus_model5::ShutdownMode(bool OnOff)
 {
 	OnOff ? WriteDisplay(MAX7219_REG_ShutDown, 0) : WriteDisplay(MAX7219_REG_ShutDown, 1);
 }
@@ -359,7 +359,7 @@ void MAX7219_SS_RPI::ShutdownMode(bool OnOff)
 	@param OnOff true = display test mode on , false display Test Mode off
 	@note Display-test mode turns all LEDs on
 */
-void MAX7219_SS_RPI:: DisplayTestMode(bool OnOff)
+void MAX7219plus_model5:: DisplayTestMode(bool OnOff)
 {
 	OnOff ? WriteDisplay(MAX7219_REG_DisplayTest, 1) : WriteDisplay(MAX7219_REG_DisplayTest, 0);
 }
@@ -369,25 +369,25 @@ void MAX7219_SS_RPI:: DisplayTestMode(bool OnOff)
 	@brief Set the communication delay value
 	@param commDelay Set the communication delay value uS software SPI
 */
-void MAX7219_SS_RPI::SetCommDelay(uint16_t commDelay) {_CommDelay = commDelay;}
+void MAX7219plus_model5::SetCommDelay(uint16_t commDelay) {_CommDelay = commDelay;}
 
 /*!
 	@brief Get the communication delay value
 	@return Get the communication delay value uS Software SPi
 */
-uint16_t  MAX7219_SS_RPI::GetCommDelay(void) {return _CommDelay;}
+uint16_t  MAX7219plus_model5::GetCommDelay(void) {return _CommDelay;}
 
 /*!
 	@brief Get the Current Display Number
 	@return Get the Current Display Number
 */
-uint8_t MAX7219_SS_RPI::GetCurrentDisplayNumber(void){return _CurrentDisplayNumber; }
+uint8_t MAX7219plus_model5::GetCurrentDisplayNumber(void){return _CurrentDisplayNumber; }
 
 /*!
 	@brief Set the Current Display Number
 	@param DisplayNum Set the Current Display Number
 */
-void MAX7219_SS_RPI::SetCurrentDisplayNumber(uint8_t DisplayNum )
+void MAX7219plus_model5::SetCurrentDisplayNumber(uint8_t DisplayNum )
 {
 if (DisplayNum == 0 ) DisplayNum = 1; // Zero user error check
 
@@ -399,7 +399,7 @@ _CurrentDisplayNumber  = DisplayNum  ;
 	@param number  integer to display 2^32
 	@param TextAlignment enum text alignment, left or right alignment or leading zeros
 */
-void  MAX7219_SS_RPI::DisplayIntNum(unsigned long number, TextAlignment_e TextAlignment)
+void  MAX7219plus_model5::DisplayIntNum(unsigned long number, TextAlignment_e TextAlignment)
 {
 	char values[_NoDigits+1];
 	char TextDisplay[6] = "%";
@@ -433,7 +433,7 @@ void  MAX7219_SS_RPI::DisplayIntNum(unsigned long number, TextAlignment_e TextAl
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble.
 */
-void MAX7219_SS_RPI::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, TextAlignment_e TextAlignment)
+void MAX7219plus_model5::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, TextAlignment_e TextAlignment)
 {
 	char valuesUpper[_NoDigits+ 1];
 	char valuesLower[_NoDigits/2 + 1];
@@ -465,7 +465,7 @@ void MAX7219_SS_RPI::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberL
 	@param value The uint8_t of data to shift out
 	@note _CommDelay microsecond delay may have to be adjusted depending on processor
 */
-void MAX7219_SS_RPI::HighFreqshiftOut(uint8_t value)
+void MAX7219plus_model5::HighFreqshiftOut(uint8_t value)
 {
 
 	for (uint8_t bit = 0; bit < 8; bit++)
@@ -485,7 +485,7 @@ void MAX7219_SS_RPI::HighFreqshiftOut(uint8_t value)
 	@param decimalPoint Is the decimal point(dp) to be set or not.
 	@return The seven segment representation of the ASCII character in a byte dpabcdefg
 */
-uint8_t MAX7219_SS_RPI::ASCIIFetch(uint8_t character, DecimalPoint_e decimalPoint)
+uint8_t MAX7219plus_model5::ASCIIFetch(uint8_t character, DecimalPoint_e decimalPoint)
 {
 	if (character < _ASCII_FONT_OFFSET || character >= _ASCII_FONT_END )
 	{
@@ -509,7 +509,7 @@ uint8_t MAX7219_SS_RPI::ASCIIFetch(uint8_t character, DecimalPoint_e decimalPoin
 	@param RegisterCode the register to write to
 	@param data The data byte to send to register
 */
-void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data)
+void MAX7219plus_model5::WriteDisplay( uint8_t RegisterCode, uint8_t data)
 {
 
 	if (_HardwareSPI == false)
@@ -548,7 +548,7 @@ void MAX7219_SS_RPI::WriteDisplay( uint8_t RegisterCode, uint8_t data)
 	@brief Set the decode mode of the  MAX7219 decode mode register
 	@param mode Set to 0x00 for most users
 */
-void MAX7219_SS_RPI::SetDecodeMode(DecodeMode_e mode)
+void MAX7219plus_model5::SetDecodeMode(DecodeMode_e mode)
 {
 	WriteDisplay(MAX7219_REG_DecodeMode , mode);
 }
@@ -559,7 +559,7 @@ void MAX7219_SS_RPI::SetDecodeMode(DecodeMode_e mode)
 	from 1 to 8.
 	@note Advanced users only , read datasheet
 */
-void MAX7219_SS_RPI::SetScanLimit(ScanLimit_e numDigits)
+void MAX7219plus_model5::SetScanLimit(ScanLimit_e numDigits)
 {
 	WriteDisplay(MAX7219_REG_ScanLimit, numDigits);
 }
@@ -575,7 +575,7 @@ void MAX7219_SS_RPI::SetScanLimit(ScanLimit_e numDigits)
 	the font data is used by other modules(TM1638 + TM1637) and they use dp-gfedcba order.
 	Thus we can share same font file between all seven segment modules.
 */
-uint8_t MAX7219_SS_RPI::flipBitsPreserveMSB(uint8_t byte) 
+uint8_t MAX7219plus_model5::flipBitsPreserveMSB(uint8_t byte) 
 {
 	uint8_t msb = byte & 0x80; // Extract the most significant bit (MSB)
 	uint8_t flipped = 0;       // Variable to store the flipped result

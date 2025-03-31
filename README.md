@@ -36,7 +36,7 @@ for the Raspberry PI PICO
 
 ### API Documentation
 
-The code is commented for doxygen and a application programming interface can be created using the doxygen tool.
+The code is commented for doxygen and an application programming interface can be created using the doxygen tool.
 
 ## File system
 
