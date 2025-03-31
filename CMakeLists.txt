@@ -20,7 +20,12 @@ add_executable(${PROJECT_NAME}
   examples/tm1638/MODEL1/main.cpp
   #examples/tm1638/MODEL2/main.cpp
   #examples/tm1638/MODEL3/main.cpp
+
   #examples/tm1637/main.cpp
+
+  #examples/max7219/tests/main.cpp
+  #examples/max7219/cascade_demo/main.cpp
+  #examples/max7219/bcdmode/main.cpp
 )
 
 # Create map/bin/hex/uf2 files
@@ -35,13 +40,13 @@ target_sources(pico_displaylib_LED_PICO INTERFACE
   ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME}/tm1638plus_model3.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME}/tm1638plus_common.cpp
   ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME}/tm1637.cpp
+  ${CMAKE_CURRENT_LIST_DIR}/src/${PROJECT_NAME}/max7219.cpp
 )
 
 target_include_directories(pico_displaylib_LED_PICO INTERFACE ${CMAKE_CURRENT_LIST_DIR}/include)
 
 # Pull in pico libraries that we need
-target_link_libraries(${PROJECT_NAME} pico_stdlib pico_displaylib_LED_PICO )
-
+target_link_libraries(${PROJECT_NAME} pico_stdlib hardware_spi pico_displaylib_LED_PICO )
 
 # Enable usb output, disable uart output
 pico_enable_stdio_usb(${PROJECT_NAME} 1)

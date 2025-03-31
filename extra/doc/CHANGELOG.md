@@ -12,4 +12,4 @@
 * Version 2.1.0 March 2025
 	* Changed name of project to displaylib_LED_PICO, it will now support all
 	LED segment displays that will be added
-	* Added support for tm1637.
+	* Added support for tm1637 & max7219

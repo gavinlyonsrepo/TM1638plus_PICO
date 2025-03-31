@@ -1,5 +1,5 @@
 /*!
-	@file   tm638plus_model2.hpp
+	@file   tm1638plus_model2.hpp
 	@author Gavin Lyons
 	@brief  PICO library, Header file for TM1638 module(16 KEY 16 pushbuttons. Model 2.
 */
@@ -34,7 +34,7 @@ public:
 	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
 
 private:
-	bool _SWAP_NIBBLES = false;
+	bool _SWAP_NIBBLES = false; /**< If true the nibbles in display byte will be switched AAAABBBB BBBBAAAA */
 };
 
 #endif
