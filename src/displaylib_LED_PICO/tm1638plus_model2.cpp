@@ -51,93 +51,83 @@ void TM1638plus_model2::DisplaySegments(uint8_t segment, uint8_t digit)
 	@param numberUpper   upper nibble integer 2^16
 	@param numberLower   lower nibble integer 2^16
 	@param dots Decimal point display, switch's on decimal point for those positions.  0 to 0xFF
-	@param leadingZeros  leading zeros set, true on , false off
-	@param TextAlignment left or right text alignment on display
+	@param TextAlignment text alignment on display
 	@note
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble. Converts to string internally.
 */
-void TM1638plus_model2::DisplayHexNum(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model2::DisplayHexNum(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, TextAlignment_e TextAlignment)
 {
-	char valuesUpper[TM_DISPLAY_SIZE + 1];
+	char valuesUpper[TM_DISPLAY_SIZE / 2 + 1];
 	char valuesLower[TM_DISPLAY_SIZE / 2 + 1];
-	char TextDisplay[5] = "%";
-	char TextLeft[4] = "-4X";
-	char TextRight[3] = "4X";
-
-	if (TextAlignment == AlignTextLeft)
+	// Select format based on alignment type
+	const char* format;
+	switch (TextAlignment)
 	{
-		strcat(TextDisplay, TextLeft); // %-4X
+		case AlignLeft: format = "%-4X"; break;
+		case AlignRight: format = "%4X"; break;
+		case AlignRightZeros: format = "%04X"; break;
+		default: format = "%4X"; break;
 	}
-	else if (TextAlignment == AlignTextRight)
-	{
-		strcat(TextDisplay, TextRight); // %4X
-	}
-
-	snprintf(valuesUpper, TM_DISPLAY_SIZE / 2 + 1, leadingZeros ? "%04X" : TextDisplay, numberUpper);
-	snprintf(valuesLower, TM_DISPLAY_SIZE / 2 + 1, leadingZeros ? "%04X" : TextDisplay, numberLower);
+	// Format numbers into buffers
+	snprintf(valuesUpper, sizeof(valuesUpper), format, numberUpper);
+	snprintf(valuesLower, sizeof(valuesLower), format, numberLower);
 	strcat(valuesUpper, valuesLower);
 	DisplayStr(valuesUpper, dots);
 }
+
 
 /*!
 	@brief Display an decimal number
 	@param number  integer to display 2^32.
 	@param dots Decimal point display, switch's on decimal point for those positions.
-	@param leadingZeros  leading zeros set, true on , false off.
-	@param TextAlignment  left or right text alignment on display.
+	@param TextAlignment text alignment on display.
 	@note Converts to string internally
 */
-void TM1638plus_model2::DisplayDecNum(unsigned long number, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model2::DisplayDecNum(unsigned long number, uint8_t dots, TextAlignment_e TextAlignment)
 {
 	char values[TM_DISPLAY_SIZE + 1];
-	char TextDisplay[5] = "%";
-	char TextLeft[3] = "ld";
-	char TextRight[4] = "8ld";
-
-	if (TextAlignment == AlignTextLeft)
+	// Select format based on alignment type
+	const char* format;
+	switch (TextAlignment)
 	{
-		strcat(TextDisplay, TextLeft); // %ld
+		case AlignLeft: format = "%ld"; break;
+		case AlignRight: format = "%8ld"; break;
+		case AlignRightZeros: format = "%08ld"; break;
+		default: format = "%ld"; break;
 	}
-	else if (TextAlignment == AlignTextRight)
-	{
-		strcat(TextDisplay, TextRight); // %8ld
-	}
-
-	snprintf(values, TM_DISPLAY_SIZE + 1, leadingZeros ? "%08ld" : TextDisplay, number);
+	// Format number into values buffer
+	snprintf(values, sizeof(values), format, number);
 	DisplayStr(values, dots);
 }
+
 
 /*!
 	@brief Display an integer in each nibble (4 digits on display)
 	@param numberUpper   upper nibble integer 2^16
 	@param numberLower   lower nibble integer 2^16
 	@param dots Turn on or off  decimal points  to 0xFF d7d6d5d4d3d2d1d0
-	@param leadingZeros  leading zeros set, true on , false off
-	@param TextAlignment  left or right text alignment on display
+	@param TextAlignment  text alignment on display
 	@note
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble.
 */
-void TM1638plus_model2::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model2::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, TextAlignment_e TextAlignment)
 {
-	char valuesUpper[TM_DISPLAY_SIZE + 1];
+	char valuesUpper[TM_DISPLAY_SIZE / 2 + 1];
 	char valuesLower[TM_DISPLAY_SIZE / 2 + 1];
-	char TextDisplay[5] = "%";
-	char TextLeft[4] = "-4d";
-	char TextRight[3] = "4d";
-
-	if (TextAlignment == AlignTextLeft)
+	// Select format based on alignment type
+	const char* format;
+	switch (TextAlignment)
 	{
-		strcat(TextDisplay, TextLeft); // %-4d
+		case AlignLeft: format = "%-4d"; break;
+		case AlignRight: format = "%4d"; break;
+		case AlignRightZeros: format = "%04d"; break;
+		default: format = "%4d"; break;
 	}
-	else if (TextAlignment == AlignTextRight)
-	{
-		strcat(TextDisplay, TextRight); // %4d
-	}
-
-	snprintf(valuesUpper, TM_DISPLAY_SIZE / 2 + 1, leadingZeros ? "%04d" : TextDisplay, numberUpper);
-	snprintf(valuesLower, TM_DISPLAY_SIZE / 2 + 1, leadingZeros ? "%04d" : TextDisplay, numberLower);
+	// Format numbers into buffers
+	snprintf(valuesUpper, sizeof(valuesUpper), format, numberUpper);
+	snprintf(valuesLower, sizeof(valuesLower), format, numberLower);
 	strcat(valuesUpper, valuesLower);
 	DisplayStr(valuesUpper, dots);
 }
@@ -178,7 +168,7 @@ int TM1638plus_model2::DisplayStr(const char *string, uint16_t dots)
 			if (dots >> (7 - i) & 1)
 			{ // if dots bit is set for that position apply the mask to turn on dot(0x80).
 				Result = font[string[i] - _ASCII_FONT_OFFSET];
-				values[i] = (Result | TM_DOT_MASK_DEC); // apply the Dot bitmask to value extracted from ASCII table
+				values[i] = (Result | DEC_POINT_7_MASK); // apply the Dot bitmask to value extracted from ASCII table
 			}
 			else
 				values[i] = font[string[i] - _ASCII_FONT_OFFSET];

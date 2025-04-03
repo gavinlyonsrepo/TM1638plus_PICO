@@ -57,25 +57,21 @@ void TM1638plus_model1::setLEDs(uint16_t ledvalues)
 /*!
 	@brief Display an integer and leading zeros optional
 	@param number  integer to display 2^32
-	@param leadingZeros  leading zeros set, true on , false off
-	@param TextAlignment  left or right text alignment on display
+	@param TextAlignment  text alignment on display
 */
-void TM1638plus_model1::displayIntNum(unsigned long number, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model1::displayIntNum(unsigned long number, TextAlignment_e TextAlignment)
 {
 	char values[TM_DISPLAY_SIZE + 1];
-	char TextDisplay[5] = "%";
-	char TextLeft[3] = "ld";
-	char TextRight[4] = "8ld";
-	
-	if (TextAlignment == AlignTextLeft)
-		{
-				strcat(TextDisplay ,TextLeft);  // %ld
-		}else if ( TextAlignment == AlignTextRight)
-		{
-				strcat(TextDisplay ,TextRight); // %8ld
-		}
-		
-	snprintf(values, TM_DISPLAY_SIZE + 1, leadingZeros ? "%08ld" : TextDisplay, number); 
+	const char* format;
+	switch (TextAlignment)
+	{
+		case AlignLeft: format = "%ld";  break;
+		case AlignRight: format = "%8ld"; break;
+		case AlignRightZeros:format = "%08ld"; break;
+		default: format = "%ld"; break;
+	}
+	// Format number into values buffer
+	snprintf(values, TM_DISPLAY_SIZE + 1, format, number);
 	displayText(values);
 }
 
@@ -83,34 +79,32 @@ void TM1638plus_model1::displayIntNum(unsigned long number, bool leadingZeros, A
 	@brief Display an integer in a nibble (4 digits on display)
 	@param numberUpper   upper nibble integer 2^16
 	@param numberLower   lower nibble integer 2^16
-	@param leadingZeros  leading zeros set, true on , false off
-	@param TextAlignment  left or right text alignment on display
+	@param TextAlignment  text alignment on display
 	@note
 		Divides the display into two nibbles and displays a Decimal number in each.
 		takes in two numbers 0-9999 for each nibble.
 */
-void TM1638plus_model1::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t numberLower, bool leadingZeros, AlignTextType_e TextAlignment)
+void TM1638plus_model1::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, TextAlignment_e TextAlignment)
 {
-		char valuesUpper[TM_DISPLAY_SIZE + 1];
-		char valuesLower[TM_DISPLAY_SIZE/2 + 1];
-		char TextDisplay[5] = "%";
-		char TextLeft[4] = "-4d";
-		char TextRight[3] = "4d";
-	 
-		 if (TextAlignment == AlignTextLeft)
-		{
-				strcat(TextDisplay ,TextLeft);  // %-4d
-		}else if ( TextAlignment == AlignTextRight)
-		{
-				strcat(TextDisplay ,TextRight); // %4d
-		}
-		
-		snprintf(valuesUpper, TM_DISPLAY_SIZE/2 + 1, leadingZeros ? "%04d" : TextDisplay, numberUpper);
-		snprintf(valuesLower, TM_DISPLAY_SIZE/2 + 1, leadingZeros ? "%04d" : TextDisplay, numberLower); 
+	char valuesUpper[TM_DISPLAY_SIZE / 2 + 1];
+	char valuesLower[TM_DISPLAY_SIZE / 2 + 1];
 
-	 strcat(valuesUpper ,valuesLower);
-	 displayText(valuesUpper);
+	// Select format based on alignment type
+	const char* format;
+	switch (TextAlignment)
+	{
+		case AlignLeft: format = "%-4d"; break;
+		case AlignRight: format = "%4d"; break;
+		case AlignRightZeros: format = "%04d"; break;
+		default: format = "%4d"; break;
+	}
+	// Format numbers into buffers
+	snprintf(valuesUpper, sizeof(valuesUpper), format, numberUpper);
+	snprintf(valuesLower, sizeof(valuesLower), format, numberLower);
+	strcat(valuesUpper, valuesLower);
+	displayText(valuesUpper);
 }
+
 
 /*!
 	@brief Display a text string  on display
@@ -131,31 +125,16 @@ int TM1638plus_model1::displayText(const char *text) {
 	pos = 0;
 		while ((c = (*text++)) && pos < TM_DISPLAY_SIZE)  {
 		if (*text == '.' && c != '.') {
-			displayASCIIwDot(pos++, c);
+			displayASCII(pos++, c, DecPointOn);
 
 			text++;
 		}  else {
-			displayASCII(pos++, c);
+			displayASCII(pos++, c, DecPointOff);
 		}
 		}
 	return 0;
 }
 
-/*!
-	@brief Display an ASCII character with decimal point turned on
-	@param position The position on display 0-7 
-	@param ascii The ASCII value from font table to display 
-*/
-void TM1638plus_model1::displayASCIIwDot(uint8_t position, uint8_t ascii) { 
-	if (ascii < _ASCII_FONT_OFFSET || ascii >= _ASCII_FONT_END )
-	{
-		printf("Warning : displayASCIIwDot : ASCII character is outside font range %u, \n", ascii);
-		ascii = '0';
-	} 
-	const uint8_t *font = SevenSegmentFont::pFontSevenSegptr();
-	// add 128 or 0x080 0b1000000 to turn on decimal point/dot in seven seg
-	display7Seg(position, font[ascii- _ASCII_FONT_OFFSET] + TM_DOT_MASK_DEC);
-}
 
 /*!
 	@brief  Send seven segment value to seven segment
@@ -175,15 +154,24 @@ void TM1638plus_model1::display7Seg(uint8_t position, uint8_t value) { // call 7
 	@brief Display an ASCII character on display
 	@param position The position on display 0-7  
 	@param ascii The ASCII value from font table  to display 
+	@param decimalPoint decimal point or off on the digit.
 */
-void TM1638plus_model1::displayASCII(uint8_t position, uint8_t ascii) {
+void TM1638plus_model1::displayASCII(uint8_t position, uint8_t ascii, DecimalPoint_e decimalPoint) {
 	if (ascii < _ASCII_FONT_OFFSET || ascii >= _ASCII_FONT_END )
 	{
 		printf("Warning : displayASCII : ASCII character is outside font range %u, \n", ascii);
 		ascii = '0';
 	} // check ASCII font bounds
 	const uint8_t *font = SevenSegmentFont::pFontSevenSegptr();
-	display7Seg(position, font[ascii - _ASCII_FONT_OFFSET]);
+	switch (decimalPoint)
+	{
+		case DecPointOff: 
+			display7Seg(position, font[ascii - _ASCII_FONT_OFFSET]); 
+			break;
+		case DecPointOn: // add 128 or 0x080 0b1000000 to turn on decimal point/dot in seven seg
+			display7Seg(position, font[ascii- _ASCII_FONT_OFFSET] + DEC_POINT_7_MASK); 
+			break;
+	}
 }
 
  /*!

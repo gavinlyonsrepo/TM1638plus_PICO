@@ -4,20 +4,22 @@
 	@brief library header file to drive MAX7219 displays
 */
 
-#pragma once
+#ifndef MAX7219PLUS_COMMON_H
+#define MAX7219PLUS_COMMON_H
 
 // Libraries
 #include <cstring>
 #include <cstdio> //snprintf
 #include "pico/stdlib.h"
 #include "hardware/spi.h"
+#include "common_data.hpp"
 #include "seven_segment_font_data.hpp"
 
 
 /*!
 	@brief  Drive MAX7219 seven segment displays
 */
-class MAX7219plus_model5 : protected SevenSegmentFont
+class MAX7219plus_model5 : public SevenSegmentFont , public CommonData
 {
 public:
 	MAX7219plus_model5(uint8_t clock, uint8_t chipSelect, uint8_t data, uint16_t CommDelay);
@@ -31,7 +33,6 @@ public:
 		DecodeModeBCDTwo   = 0x0F, /**< Code B decode for digits 3–0, No decode for digits 7–4*/
 		DecodeModeBCDThree = 0xFF  /**< Code B decode for digits 7–0 */
 	};
-
 	/*!  sets BCD code B font (0-9, E, H, L,P, and -) Built-in font */
 	enum CodeBFont_e : uint8_t
 	{
@@ -52,22 +53,6 @@ public:
 		CodeBFontP       = 0x0E, /**< Code B decode for letter P */
 		CodeBFontSpace   = 0x0F  /**< Code B decode for Space */
 	};
-
-	/*! Alignment of text on display */
-	enum TextAlignment_e : uint8_t
-	{
-		AlignLeft       = 0,  /**< Align text to the left on  display */
-		AlignRight      = 1,  /**< Align text to the right on  display */
-		AlignRightZeros = 2   /**< Add leading zeros  to the text */
-	};
-
-	/*! Activate Decimal point segment */
-	enum DecimalPoint_e : uint8_t
-	{
-		DecPointOff  = 0, /**< Decimal point segment off */
-		DecPointOn   = 1  /**< Decimal point segment on */
-	};
-
 	/*! Set intensity/brightness of Display */
 	enum Intensity_e : uint8_t
 	{
@@ -75,7 +60,6 @@ public:
 		IntensityDefault = 0x08, /**< Default Intensity */
 		IntensityMax     = 0x0F  /**<  Maximum Intensity */
 	};
-
 	/*! The scan-limit register sets how many digits are displayed */
 	enum ScanLimit_e : uint8_t
 	{
@@ -135,11 +119,11 @@ private:
 	uint8_t _Display_SDATA;  /**<  GPIO connected to DIO on MAX7219*/
 	uint8_t _Display_SCLK;   /**<  GPIO connected to CLK on MAX7219*/
 
-	uint16_t _CommDelay = 0; /**<  uS delay used in communications SW SPI, User adjust */
-	uint8_t _NoDigits   = 8; /**<  Number of digits in display */
+	uint16_t _CommDelay = 0;    /**<  uS delay used in communications SW SPI, User adjust */
+	uint8_t _NoDigits   = 8;    /**<  Number of digits in display */
 	bool _HardwareSPI = false;  /**< Is the Hardware SPI on , true yes , false SW SPI*/
-	spi_inst_t *_pspiInterface;	  /**< SPI instance pointer*/
-	uint16_t _speedSPIKHz;		  /**< SPI speed value in kilohertz*/
+	spi_inst_t *_pspiInterface;	/**< SPI instance pointer*/
+	uint16_t _speedSPIKHz;		/**< SPI speed value in kilohertz*/
 
 	DecodeMode_e CurrentDecodeMode; /**< Enum to store current decode mode  */
 
@@ -153,3 +137,4 @@ private:
 	uint8_t flipBitsPreserveMSB(uint8_t byte);
 };
 
+#endif

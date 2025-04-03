@@ -7,28 +7,22 @@
 #ifndef TM1638PLUS_COMMON_H
 #define TM1638PLUS_COMMON_H
 
+#include "common_data.hpp"
 #include "seven_segment_font_data.hpp"
 #include <cstdio>
 
 /*!
 	@brief  The base Class , used to store common data & functions for all models types.
 */
-class TM1638plus_common : protected SevenSegmentFont
+class TM1638plus_common : public SevenSegmentFont , public CommonData
 {
 
 public:
 	// Constructor
 	TM1638plus_common(uint8_t strobe, uint8_t clock, uint8_t data);
 
-	/*! Alignment of text on display */
-	enum AlignTextType_e : uint8_t
-	{
-		AlignTextRight = 1, /**< Align text to the right on display */
-		AlignTextLeft = 2	/**< Align text to the left  on display */
-	};
-
-	void displayBegin();
-	void displayClose();
+	void displayBegin(void);
+	void displayClose(void);
 	void reset(void);
 	void brightness(uint8_t brightness);
 
@@ -51,9 +45,6 @@ protected:
 	static constexpr uint8_t TM_BRIGHT_MASK = 0x07;		   /**< Brightness mask */
 	static constexpr uint8_t TM_DEFAULT_BRIGHTNESS = 0x02; /**< Brightness can be 0x00 to 0x07, 0x00 is least bright */
 	static constexpr uint8_t TM_DISPLAY_SIZE = 8;		   /**< Size of display in digits */
-
-		
-	const uint8_t TM_DOT_MASK_DEC = 0x80; /**< Mask to switch on decimal point in seven-segment */
 
 	uint8_t HighFreqshiftin(uint8_t dataPin, uint8_t clockPin);
 	void HighFreqshiftOut(uint8_t dataPin, uint8_t clockPin, uint8_t val);

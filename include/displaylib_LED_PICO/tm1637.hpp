@@ -4,19 +4,21 @@
 	@brief   Header file for for TM1637 module. Model 4
 */
 
-#pragma once
+#ifndef TM1637PLUS_COMMON_H
+#define TM1637PLUS_COMMON_H
 
 #include <stdint.h>
 #include <stdbool.h>
 #include <cstdio>  //printf
 #include <cstring> //strlen
 #include "pico/stdlib.h"
+#include "common_data.hpp"
 #include "seven_segment_font_data.hpp"
 
 /*!
 	@brief Class for TM1637 Model 4
 */
-class TM1637plus_model4 : protected SevenSegmentFont{
+class TM1637plus_model4 : public SevenSegmentFont , public CommonData{
 
 public:
 
@@ -52,3 +54,5 @@ private:
 	bool writeByte(uint8_t byte);
 
 };
+
+#endif

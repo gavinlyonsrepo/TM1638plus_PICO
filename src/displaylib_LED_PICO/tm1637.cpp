@@ -150,7 +150,7 @@ void TM1637plus_model4::DisplayDecimalwDot(int number, uint8_t dots,  bool leadi
 			number -= character * divisor;   // Remove the processed digit from the number
 			leading = false;                 // Leading zeros end as soon as a non-zero digit is found
 		}
-		digit |= (dots & 0x80);
+		digit |= (dots & DEC_POINT_7_MASK);
 		dots <<= 1;
 		digits[i] = digit;
 	}
@@ -193,7 +193,7 @@ int TM1637plus_model4::DisplayString(const char* numStr, uint8_t dots, uint8_t l
 		char currentChar = numStr[i];
 		digit = encodeCharacter(currentChar);
 		// Add the decimal point/colon to the digit if specified in `dots`
-		digit |= (dots & 0x80); // Check the MSB of `dots` and add it to the current digit
+		digit |= (dots & DEC_POINT_7_MASK); // Check the MSB of `dots` and add it to the current digit
 		dots <<= 1;             // Shift the `dots` value to apply the next dot/colon to the next digit
 		digits[i] = digit;
 	}

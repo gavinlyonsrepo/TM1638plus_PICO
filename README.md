@@ -1,12 +1,9 @@
 # displaylib_LED_PICO README
 
-
-
 ## Overview
 
 * Name: displaylib_LED_PICO
 * Author: Gavin Lyons.
-
 * Description:
 
 C++ SDK Library to support LED segment display modules
@@ -33,6 +30,7 @@ for the Raspberry PI PICO
 | TM1637 |7 segment LED display module|GPIO| [Readme](extra/doc/tm1637/README.md)|
 | TM1638 |7 segment LED display module|GPIO| [Readme](extra/doc/tm1638/README.md)|
 | MAX7219|7 segment LED display module|GPIO| [Readme](extra/doc/max7219/README.md)|
+| HT16K33 |7,9,14 & 16 segment LED display module|GPIO| [Readme](extra/doc/ht16k33/README.md)|
 
 ### API Documentation
 

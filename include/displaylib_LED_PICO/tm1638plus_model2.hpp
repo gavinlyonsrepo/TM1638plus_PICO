@@ -27,11 +27,11 @@ public:
 	uint16_t ReadKey16Two(void);
 
 	void DisplaySegments(uint8_t segment, uint8_t segmentValue);
-	void DisplayHexNum(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
-	void DisplayDecNum(unsigned long number, uint8_t dots, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
+	void DisplayHexNum(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, TextAlignment_e = AlignLeft);
+	void DisplayDecNum(unsigned long number, uint8_t dots, TextAlignment_e = AlignLeft);
 	int  DisplayStr(const char *string, const uint16_t dots = 0);
 	void ASCIItoSegment(const uint8_t values[]);
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
+	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, uint8_t dots, TextAlignment_e = AlignLeft);
 
 private:
 	bool _SWAP_NIBBLES = false; /**< If true the nibbles in display byte will be switched AAAABBBB BBBBAAAA */

@@ -111,7 +111,7 @@ void Test2()
 {
 	// Test 2 ASCII , display 2.341
 
-	tm.displayASCIIwDot(0, '2');
+	tm.displayASCII(0, '2', tm.DecPointOn);
 	tm.displayASCII(1, '3');
 	tm.displayASCII(2, '4');
 	tm.displayASCII(3, '1');
@@ -175,7 +175,7 @@ void Test6()
 	// ADC=.2.948
 	char text1[] = "ADC=.";
 	tm.displayText(text1);
-	tm.displayASCIIwDot(4, '2');
+	tm.displayASCII(4, '2', tm.DecPointOn);
 	tm.displayASCII(5, '9');
 	tm.displayASCII(6, '4');
 	tm.displayASCII(7, '8');
@@ -186,30 +186,30 @@ void Test6()
 void Test7()
 {
 	// TEST 7a Integer left aligned , NO leading zeros
-	tm.displayIntNum(45, false, tm.AlignTextLeft); // "45      "
+	tm.displayIntNum(45, tm.AlignLeft); // "45      "
 	busy_wait_ms(myTestDelay);
-	// TEST 7b Integer left aligned , leading zeros
-	tm.displayIntNum(99991, true, tm.AlignTextLeft); // "00099991"
+	// TEST 7b Integer  leading zeros
+	tm.displayIntNum(99991, tm.AlignRightZeros); // "00099991"
 	busy_wait_ms(myTestDelay);
 	tm.reset();
 	// TEST 7c Integer right aligned , NO leading zeros
-	tm.displayIntNum(35, false, tm.AlignTextRight); // "      35"
+	tm.displayIntNum(35, tm.AlignRight); // "      35"
 	busy_wait_ms(myTestDelay);
-	// TEST 7d Integer right aligned , leading zeros
-	tm.displayIntNum(9983551, true, tm.AlignTextRight); // "09983551"
+	// TEST 7d Integer leading zeros
+	tm.displayIntNum(9983551, tm.AlignRightZeros); // "09983551"
 	busy_wait_ms(myTestDelay);
 
 	// TEST 7e tm.DisplayDecNumNIbble left aligned
-	tm.DisplayDecNumNibble(134, 70, false, tm.AlignTextLeft); // "134 " "70" , left aligned, NO leading zeros
+	tm.DisplayDecNumNibble(134, 70, tm.AlignLeft); // "134 " "70" , left aligned, NO leading zeros
 	busy_wait_ms(myTestDelay);
-	tm.DisplayDecNumNibble(23, 662, true, tm.AlignTextLeft); // "0023" "0662" , left aligned , leading zeros
+	tm.DisplayDecNumNibble(23, 662, tm.AlignRightZeros); // "0023" "0662" , left aligned , leading zeros
 	busy_wait_ms(myTestDelay);
 	tm.reset();
 
 	// TEST 7f tm.DisplayDecNumNIbble right aligned
-	tm.DisplayDecNumNibble(43, 991, false, tm.AlignTextRight); // "  43" " 991" , right aligned, NO leading zeros
+	tm.DisplayDecNumNibble(43, 991, tm.AlignRight); // "  43" " 991" , right aligned, NO leading zeros
 	busy_wait_ms(myTestDelay);
-	tm.DisplayDecNumNibble(53, 8, true, tm.AlignTextRight); // "0053" "0008" , right aligned , leading zeros
+	tm.DisplayDecNumNibble(53, 8, tm.AlignRightZeros); // "0053" "0008" , right aligned , leading zeros
 	busy_wait_ms(myTestDelay);
 }
 
@@ -340,7 +340,7 @@ void Test14()
 		 0x80 : S8 Pressed  1000 0000
 		*/
 		doLEDs(buttons);
-		tm.displayIntNum(buttons, true);
+		tm.displayIntNum(buttons, tm.AlignRightZeros);
 		busy_wait_ms(250);
 		if (buttons == 0x81){
 			busy_wait_ms(1000);

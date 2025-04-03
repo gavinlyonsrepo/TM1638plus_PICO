@@ -444,8 +444,8 @@ void MAX7219plus_model5::DisplayDecNumNibble(uint16_t  numberUpper, uint16_t num
 
 	switch(TextAlignment)
 	{
-		case AlignRight: strcat(TextDisplay ,TextRight); break; // %4d
 		case AlignLeft: strcat(TextDisplay ,TextLeft); break;  // %-4d
+		case AlignRight: strcat(TextDisplay ,TextRight); break; // %4d
 		case AlignRightZeros: strcat(TextDisplay ,TextLeadZero); break; // %04d
 	}
 
@@ -478,7 +478,6 @@ void MAX7219plus_model5::HighFreqshiftOut(uint8_t value)
 	}
 }
 
-
 /*!
 	@brief Fetch's the seven segment code for a given ASCII code from the font
 	@param character The ASCII character to  lookup
@@ -497,7 +496,7 @@ uint8_t MAX7219plus_model5::ASCIIFetch(uint8_t character, DecimalPoint_e decimal
 	returnCharValue = flipBitsPreserveMSB(font[character - _ASCII_FONT_OFFSET]);
 	switch (decimalPoint)
 	{
-		case DecPointOn  :  returnCharValue |= (1<<7); break;
+		case DecPointOn  :  returnCharValue |= DEC_POINT_7_MASK; break;
 		case DecPointOff :  break;
 	}
 
@@ -577,7 +576,7 @@ void MAX7219plus_model5::SetScanLimit(ScanLimit_e numDigits)
 */
 uint8_t MAX7219plus_model5::flipBitsPreserveMSB(uint8_t byte) 
 {
-	uint8_t msb = byte & 0x80; // Extract the most significant bit (MSB)
+	uint8_t msb = byte & DEC_POINT_7_MASK; // Extract the most significant bit (MSB)
 	uint8_t flipped = 0;       // Variable to store the flipped result
 	for (int i = 0; i < 7; ++i) 
 	{
@@ -587,6 +586,6 @@ uint8_t MAX7219plus_model5::flipBitsPreserveMSB(uint8_t byte)
 			flipped |= (1 << (6 - i));
 		}
 	}
-	return msb | flipped; // Combine the MSB with the flipped bits
+	return msb | flipped; // Combine the saved MSB with the flipped bits
 }
 // == EOF ==

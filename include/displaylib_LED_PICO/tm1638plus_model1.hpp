@@ -28,13 +28,11 @@ public:
 	virtual void setLED(uint8_t position, uint8_t value);
 
 	 int displayText(const char *text);
-	void displayASCII(uint8_t position, uint8_t ascii);
-	void displayASCIIwDot(uint8_t position, uint8_t ascii) ;
+	void displayASCII(uint8_t position, uint8_t ascii, DecimalPoint_e decimalPoint= DecPointOff);
 	void displayHex(uint8_t position, uint8_t hex);
 	void display7Seg(uint8_t position, uint8_t value);
-	void displayIntNum(unsigned long number, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
-	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, bool leadingZeros = true, AlignTextType_e = AlignTextLeft);
-	
+	void displayIntNum(unsigned long number, TextAlignment_e = AlignLeft);
+	void DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, TextAlignment_e = AlignLeft);
 };
 
 #endif
