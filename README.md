@@ -29,12 +29,12 @@ for the Raspberry PI PICO
 | -------- | ---------- | --------- | ---------- |
 | TM1637 |7 segment LED display module|GPIO| [Readme](extra/doc/tm1637/README.md)|
 | TM1638 |7 segment LED display module|GPIO| [Readme](extra/doc/tm1638/README.md)|
-| MAX7219|7 segment LED display module|GPIO| [Readme](extra/doc/max7219/README.md)|
-| HT16K33 |7,9,14 & 16 segment LED display module|GPIO| [Readme](extra/doc/ht16k33/README.md)|
+| MAX7219|7 segment LED display module|SPI| [Readme](extra/doc/max7219/README.md)|
+| HT16K33 |7,9,14 & 16 segment LED display module|I2C| [Readme](extra/doc/ht16k33/README.md)|
 
 ### API Documentation
 
-The code is commented for doxygen and an application programming interface can be created using the doxygen tool.
+The code is commented for doxygen and an application programming interface can be created using the doxygen software program.
 
 ## File system
 

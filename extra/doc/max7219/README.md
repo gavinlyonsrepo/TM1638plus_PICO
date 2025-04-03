@@ -45,7 +45,7 @@ To select between hardware and software SPI in examples files see USER OPTION SP
 ### Software SPI
 
 For Software SPI Pick any GPIO you want.
-CommDelay variable (uS Communication delay). This is a communicatiosn delay used in Software SPI clocking,
+CommDelay variable (uS Communication delay). This is a communications delay used in Software SPI clocking,
 default 0.
 
 ### Hardware SPI

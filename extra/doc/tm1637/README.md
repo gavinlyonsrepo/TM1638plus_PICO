@@ -34,7 +34,7 @@ Model 4:
 
 ## Software
 
-There is one example file. A table in file 'tm1637_font_data.cpp' provides ASCII to Seven Segment data.
+There is one example file. A table in file 'seven_segment_font_data.hpp' provides ASCII to Seven Segment data.
 . gfedcba (seven segments ) In the gfedcba representation,
 a byte value of 0x06 would turn on segments "c" and "b",
 which would display a "1". https://en.wikipedia.org/wiki/Seven-segment_display
