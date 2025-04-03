@@ -108,7 +108,7 @@ void Test1(void)
 	tm.DisplayDecNumNibble(977, 34, 1 << 4, tm.AlignRightZeros); // "0977.0034"
 	busy_wait_ms(myTestDelay);
 	// 1i right aligned, NO leading zeros
-	tm.DisplayDecNumNibble(14, 729, 1 << 5, tm.AlignLeft); // "  1.4 729"
+	tm.DisplayDecNumNibble(14, 729, 1 << 5, tm.AlignRight); // "  1.4 729"
 	busy_wait_ms(myTestDelay);
 }
 

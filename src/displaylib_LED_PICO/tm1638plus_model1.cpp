@@ -86,7 +86,7 @@ void TM1638plus_model1::displayIntNum(unsigned long number, TextAlignment_e Text
 */
 void TM1638plus_model1::DisplayDecNumNibble(uint16_t numberUpper, uint16_t numberLower, TextAlignment_e TextAlignment)
 {
-	char valuesUpper[TM_DISPLAY_SIZE / 2 + 1];
+	char valuesUpper[TM_DISPLAY_SIZE + 1];
 	char valuesLower[TM_DISPLAY_SIZE / 2 + 1];
 
 	// Select format based on alignment type
